@@ -4,25 +4,12 @@ import {AxiosInstance} from 'axios';
 import App from './App.vue'
 // 这里router.ts可以省略ts
 import router from './router'
-import store, { State } from './store';
+import store from './store';
 import { http } from './http'
 // 加载UI库, 引入后组件会被全局注册, 我们在任意组件内都可以直接使用
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.less'
 
-// 为 `this.$store` 提供类型声明
-declare module '@vue/runtime-core' {
-    export interface ComponentCustomProperties {
-        $store: Store<State>
-    }
-}
-
-// 为 `this.$http` 提供类型声明
-declare module '@vue/runtime-core' {
-    export interface ComponentCustomProperties {
-        $http: AxiosInstance;
-    }
-}
 
 const app = createApp(App);
 app.use(router);

@@ -1,28 +1,32 @@
 import { createStore } from 'vuex'
 
-export interface State {
-  // 用户信息
+// state数据
+const state = {
   userInfo: {
-    // 昵称
-    nickName: string;
+    // 用户名
+    userName: '',
     // 头像
-    userAvatar: string;
+    avatar: '',
   }
 }
+
+// state的类型
+export type State = typeof state;
 
 // 创建一个新的 store 实例
 export default createStore<State>({
   state() {
-    return {
-      userInfo: {
-        nickName: '',
-        userAvatar: '',
-      }
-
-    }
+    return state;
   },
 
   mutations: {
-
+    /**
+     * 设置用户信息
+     * @param state 状态
+     * @param userInfo 用户信息
+     */
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo;
+    }
   }
 })
