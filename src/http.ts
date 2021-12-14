@@ -1,5 +1,7 @@
 // http.ts
 import axios from 'axios'
+import { message, notification } from 'ant-design-vue';
+import qs from 'qs';
 import { LOCAL_TOKEN_KEY, HTTP_TOKEN_KEY, API_BASE_URL } from './const';
 export const http = axios.create({
   // 配置
@@ -9,7 +11,26 @@ export const http = axios.create({
   },
 });
 
-http.interceptors.response.use()
+http.interceptors.request.use(function (config) {
+  // config.data.array  = [1,2,3]
+  // config.data = qs.stringify(config.data, { arrayFormat: 'comma' });
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
+
+
+// 简化返回数据
+http.interceptors.response.use(function (response) {
+  if ('get' !== response.config.method) {
+    message.success(`操作成功!`);
+  }
+  return response;
+}, function (error) {
+  message.error(`操作失败, ${error.response.data}`);
+  return Promise.reject(error);
+});
+
 /**
  * 存储token
  * @param token 凭证 

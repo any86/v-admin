@@ -19,7 +19,6 @@ export default defineComponent({
   },
 
   mounted() {
-    console.log(this.$store.state.userInfo);
     clearHttpToken();
   },
 
@@ -34,13 +33,10 @@ export default defineComponent({
         this.$store.commit("setUserInfo", user);
         // 存储token
         setHttpToken(token);
-        // this.$store.commit('setUserInfo')
         message.success("登陆成功");
       } catch (error) {
         if (axios.isAxiosError(error) && 200 === error.response?.status) {
           message.error(error.response?.data);
-        } else {
-          message.error(`网络异常请联系管理员`);
         }
       } finally {
         this.isLoading = false;
