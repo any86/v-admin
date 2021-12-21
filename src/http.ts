@@ -20,7 +20,7 @@ http.interceptors.request.use(function (config) {
 });
 
 
-// 简化返回数据
+// 响应拦截
 http.interceptors.response.use(function (response) {
   if ('get' !== response.config.method) {
     message.success(`操作成功!`);
