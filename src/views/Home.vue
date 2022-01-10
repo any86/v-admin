@@ -1,17 +1,14 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
-import { http } from "@/http";
 import SalesAmount from './Home/SalesAmount.vue'
 import PayAndVisitAmount from './Home/PayAndVisitAmount.vue'
+import SalesCategroy from './Home/SalesCategroy.vue'
 
 export default defineComponent({
   name: "Home",
 
-  components:{SalesAmount,PayAndVisitAmount},
+  components:{SalesAmount,PayAndVisitAmount,SalesCategroy},
 
-  setup() {
-    
-  },
 });
 </script>
 
@@ -22,6 +19,9 @@ export default defineComponent({
 
     <!-- 折线图: 支付笔数和访问量 -->
     <PayAndVisitAmount/>
+
+    <!-- 饼图: 品类销售额 -->
+    <SalesCategroy/>
   </div>
 </template>
 
