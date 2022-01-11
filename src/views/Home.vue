@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent} from "vue";
 import SalesAmount from './Home/SalesAmount.vue'
 import PayAndVisitAmount from './Home/PayAndVisitAmount.vue'
 import SalesCategroy from './Home/SalesCategroy.vue'

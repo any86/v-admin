@@ -6,43 +6,51 @@ export default defineComponent({
   name: "SalesCategroy",
 
   setup() {
-    const lineRef = ref<HTMLElement>();
+    const salesCategoryChartRef = ref<HTMLElement>();
 
     onMounted(async () => {
-      const response = await http.get("/sales-amount");
+      // 请求接口
+      const response = await http.get<{
+        salesTypeData: { x: string; y: number }[];
+        salesTypeDataOnline: { x: string; y: number }[];
+        salesTypeDataOffline: { x: string; y: number }[];
+      }>("/sales-category");
+
       // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(lineRef.value as HTMLElement);
+      const myChart = echarts.init(salesCategoryChartRef.value as HTMLElement);
+
+      // 处理数据
+      const data = response.data.salesTypeData.map(({ x, y }) => {
+        return { name: x, value: y };
+      });
+
       // 绘制图表
       myChart.setOption({
-        color:['#673ab7'],
         tooltip: {},
-        yAxis: {
-          // 默认值是value, 表示根据数据生成连续的刻度
-          type: "value",
-        },
-        xAxis: {
-          data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-        },
+
         series: [
           {
-            name: "销量",
-            type: "bar",
-            data: response.data,
+            name: "销售额",
+            type: "pie",
+            // 圆环的内径和外径比例
+            radius: ["40%", "70%"],
+            data,
           },
         ],
       });
     });
-    return { lineRef };
+    return { salesCategoryChartRef };
   },
 });
 </script>
 
 <template>
-    <div class="chart-line" ref="lineRef"></div>
+
+  <div class="chart-sales-category" ref="salesCategoryChartRef"></div>
 </template>
 
 <style lang="scss">
-.chart-line {
+.chart-sales-category {
   width: 600px;
   height: 300px;
 }
