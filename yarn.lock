@@ -2,6 +2,42 @@
 # yarn lockfile v1
 
 
+"5a.css@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.npmmirror.com/5a.css/download/5a.css-0.1.19.tgz#0b7a0444323f8b2b2088c9cbd34f83b27b1feeb6"
+  integrity sha1-C3oERDI/iysgiMnL00+Dsnsf7rY=
+  dependencies:
+    "@5a.css/functions" "^0.1.19"
+    "@5a.css/helpers" "^0.1.19"
+    "@5a.css/mixins" "^0.1.19"
+    "@5a.css/reset" "^0.1.19"
+    "@5a.css/vars" "^0.1.19"
+
+"@5a.css/functions@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.npmmirror.com/@5a.css/functions/download/@5a.css/functions-0.1.19.tgz#31e9cf3b2e14cf3d7555cb06532aaa84dcc50fa1"
+  integrity sha1-MenPOy4Uzz11VcsGUyqqhNzFD6E=
+
+"@5a.css/helpers@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.npmmirror.com/@5a.css/helpers/download/@5a.css/helpers-0.1.19.tgz#5019c3a484ea09c01be224f582e6aef93797620d"
+  integrity sha1-UBnDpITqCcAb4iT1guau+TeXYg0=
+
+"@5a.css/mixins@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.npmmirror.com/@5a.css/mixins/download/@5a.css/mixins-0.1.19.tgz#cbf1d35a14ac17d83f4d67fa114ca9294ca05617"
+  integrity sha1-y/HTWhSsF9g/TWf6EUypKUygVhc=
+
+"@5a.css/reset@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.npmmirror.com/@5a.css/reset/download/@5a.css/reset-0.1.19.tgz#94597843d5516acdb5fa1bca92f743ddbc3549c5"
+  integrity sha1-lFl4Q9VRas21+hvKkvdD3bw1ScU=
+
+"@5a.css/vars@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.npmmirror.com/@5a.css/vars/download/@5a.css/vars-0.1.19.tgz#425479ab6177475d1a074dc011bc4a7be2983c80"
+  integrity sha1-QlR5q2F3R10aB03AEbxKe+KYPIA=
+
 "@ant-design/colors@^5.0.0":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@ant-design/colors/-/colors-5.1.1.tgz#800b2186b1e27e66432e67d03ed96af3e21d8940"
@@ -18,6 +54,16 @@
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@ant-design/icons-vue/-/icons-vue-6.0.1.tgz#9d804c3c74d2cfaf97cb18e582d3b9400934f5fd"
   integrity sha512-HigIgEVV6bbcrz2A92/qDzi/aKWB5EC6b6E1mxMB6aQA7ksiKY+gi4U94TpqyEIIhR23uaDrjufJ+xCZQ+vx6Q==
+  dependencies:
+    "@ant-design/colors" "^5.0.0"
+    "@ant-design/icons-svg" "^4.0.0"
+    "@types/lodash" "^4.14.165"
+    lodash "^4.17.15"
+
+"@ant-design/icons-vue@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npm.taobao.org/@ant-design/icons-vue/download/@ant-design/icons-vue-6.0.1.tgz?cache=0&sync_timestamp=1611990758478&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40ant-design%2Ficons-vue%2Fdownload%2F%40ant-design%2Ficons-vue-6.0.1.tgz#9d804c3c74d2cfaf97cb18e582d3b9400934f5fd"
+  integrity sha1-nYBMPHTSz6+XyxjlgtO5QAk09f0=
   dependencies:
     "@ant-design/colors" "^5.0.0"
     "@ant-design/icons-svg" "^4.0.0"
