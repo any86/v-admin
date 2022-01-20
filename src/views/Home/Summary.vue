@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { computed, defineComponent, onMounted, ref, toRefs } from "vue";
 import { http } from "@/http";
 import { CaretUpFilled, CaretDownFilled } from "@ant-design/icons-vue";
 // 接口返回数据
@@ -16,6 +16,7 @@ interface ResponseData {
     dayTotal: string;
   };
   salesRanking: {
+    total:string;
     list: [
       {
         title: string;
@@ -46,10 +47,20 @@ export default defineComponent({
   },
 
   setup() {
+    const isLoading = ref(true);
+    const responseData = ref<ResponseData>();
     onMounted(async () => {
       const response = await http.get<ResponseData>("/summary");
-      response.data;
+      isLoading.value = false;
+      responseData.value = response.data;
     });
+
+    const totalSales = computed(() => responseData.value?.totalSales);
+    const order = computed(() => responseData.value?.order);
+    const salesRanking = computed(() => responseData.value?.salesRanking);
+    const activityResults = computed(() => responseData.value?.activityResults);
+
+    return { isLoading, totalSales, order, salesRanking, activityResults };
   },
 });
 </script>
@@ -58,65 +69,87 @@ export default defineComponent({
   <a-row :gutter="16">
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <p class="card__title">总销售额</p>
-        <div class="card__content">
-          <p class="number">¥ 98430</p>
-          <span>周同比12% <CaretUpFilled /></span>
-          <span>日同比11% <CaretDownFilled /></span>
-        </div>
-        <footer>日销售额:¥ 1231</footer>
-      </div>
-    </a-col>
-
-    <a-col :xs="24" :sm="12" :lg="6">
-      <div class="card">
-        <p class="card__title">已支付/总订单数</p>
-        <div class="card__content">
-          <div class="d-flex align-items-center">
-            <a-progress type="dashboard" :percent="70" :width="70" />
-            <span class="ml-1">
-              <p>已支付: 7111</p>
-              <p>总订单: 12223</p>
+        <a-skeleton :loading="isLoading">
+          <p class="card__title">总销售额</p>
+          <div class="card__content">
+            <p class="number">¥ {{ totalSales.total }}</p>
+            <span
+              >周同比
+              <a-typography-text
+                :type="totalSales.weekCompared > 0 ? 'danger' : 'success'"
+                >{{ totalSales.weekCompared }}%<CaretUpFilled
+              /></a-typography-text>
+            </span>
+            <span>
+              日同比
+              <a-typography-text
+                :type="totalSales.dayCompared > 0 ? 'danger' : 'success'"
+                >{{ totalSales.dayCompared }}%<CaretDownFilled
+              /></a-typography-text>
             </span>
           </div>
-        </div>
-        <footer>日销售额:¥ 232</footer>
+          <footer>日销售额:¥ {{ totalSales.dayTotal }}</footer>
+        </a-skeleton>
       </div>
     </a-col>
 
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <p class="card__title">销量排行</p>
-        <div class="card__content">
-          <p class="product">
-            <span>小米手机</span>
-            <span>12334单</span>
-          </p>
-          <p class="product"><span>华为手机</span> <span>3634单</span></p>
-          <p class="product"><span>诺基亚手机</span> <span>1233单</span></p>
-        </div>
-        <footer class="d-flex">
-          <span class="flex-1">总计: 12313123单</span>
-          <a style="color: #1890ff">查看更多</a>
-        </footer>
+        <a-skeleton :loading="isLoading">
+          <p class="card__title">已支付/总订单数</p>
+          <div class="card__content">
+            <div class="d-flex align-items-center">
+              <a-progress
+                type="dashboard"
+                :percent="Math.round((order.paid / order.total) * 100)"
+                :width="70"
+              />
+              <span class="ml-1">
+                <p>已支付: {{ order.paid }}</p>
+                <p>总订单: {{ order.total }}</p>
+              </span>
+            </div>
+          </div>
+          <footer>今日订单: {{ order.dayTotal }}</footer>
+        </a-skeleton>
       </div>
     </a-col>
 
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <p class="card__title">活动效果</p>
-        <div class="card__content">
-          <h2>85%</h2>
-          <a-progress
-            :show-info="false"
-            :stroke-color="{
-              '0%': '#108ee9',
-              '100%': '#87d068',
-            }"
-            :percent="85"
-          />
-        </div>
-        <footer class="d-flex">总计: 12313123单</footer>
+        <a-skeleton :loading="isLoading">
+          <p class="card__title">销量排行</p>
+          <div class="card__content">
+            <p class="product" v-for="{title,totalSales} in salesRanking.list" :key="title">
+              <span>{{title}}</span>
+              <span>{{totalSales}}单</span>
+            </p>
+          </div>
+          <footer class="d-flex">
+            <span class="flex-1">总计: {{salesRanking.total}}单</span>
+            <a style="color: #1890ff">查看更多</a>
+          </footer>
+        </a-skeleton>
+      </div>
+    </a-col>
+
+    <a-col :xs="24" :sm="12" :lg="6">
+      <div class="card">
+        <a-skeleton :loading="isLoading">
+          <p class="card__title">活动效果</p>
+          <div class="card__content">
+            <h2>{{activityResults.percent}}%</h2>
+            <a-progress
+              :show-info="false"
+              :stroke-color="{
+                '0%': '#108ee9',
+                '100%': '#87d068',
+              }"
+              :percent="activityResults.percent"
+            />
+          </div>
+          <footer class="d-flex">总计: {{activityResults.totalOrder}}单</footer>
+        </a-skeleton>
       </div>
     </a-col>
   </a-row>
