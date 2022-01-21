@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, toRefs } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { http } from "@/http";
 import { CaretUpFilled, CaretDownFilled } from "@ant-design/icons-vue";
 // 接口返回数据
@@ -69,7 +69,7 @@ export default defineComponent({
   <a-row :gutter="16">
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <a-skeleton :loading="isLoading">
+        <a-skeleton active  :loading="isLoading">
           <p class="card__title">总销售额</p>
           <div class="card__content">
             <p class="number">¥ {{ totalSales.total }}</p>
@@ -95,7 +95,7 @@ export default defineComponent({
 
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <a-skeleton :loading="isLoading">
+        <a-skeleton active  :loading="isLoading">
           <p class="card__title">已支付/总订单数</p>
           <div class="card__content">
             <div class="d-flex align-items-center">
@@ -117,7 +117,7 @@ export default defineComponent({
 
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <a-skeleton :loading="isLoading">
+        <a-skeleton active  :loading="isLoading">
           <p class="card__title">销量排行</p>
           <div class="card__content">
             <p class="product" v-for="{title,totalSales} in salesRanking.list" :key="title">
@@ -135,7 +135,7 @@ export default defineComponent({
 
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <a-skeleton :loading="isLoading">
+        <a-skeleton active  :loading="isLoading">
           <p class="card__title">活动效果</p>
           <div class="card__content">
             <h2>{{activityResults.percent}}%</h2>

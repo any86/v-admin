@@ -2,6 +2,7 @@
   "name": "tie-admin",
   "version": "0.0.0",
   "scripts": {
+    "rm:nm":"rimraf node_modules",
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
