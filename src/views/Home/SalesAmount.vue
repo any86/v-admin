@@ -1,49 +1,33 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-import * as echarts from "echarts";
-import { http } from "@/http";
+import { defineComponent, ref } from "vue";
+import { useChartBar } from "./SalesAmount.config";
+
 export default defineComponent({
   name: "SalesAmount",
 
   setup() {
-    const lineRef = ref<HTMLElement>();
-
-    onMounted(async () => {
-      const response = await http.get("/sales-amount");
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(lineRef.value as HTMLElement);
-      // 绘制图表
-      myChart.setOption({
-        color:['#673ab7'],
-        tooltip: {},
-        yAxis: {
-          // 默认值是value, 表示根据数据生成连续的刻度
-          type: "value",
-        },
-        xAxis: {
-          data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-        },
-        series: [
-          {
-            name: "销量",
-            type: "bar",
-            data: response.data,
-          },
-        ],
-      });
-    });
-    return { lineRef };
+    const type = ref<0 | 1>(0);
+    const chartRef = ref<HTMLElement>();
+    const isLoading = useChartBar(chartRef, type);
+    return { type, chartRef, isLoading };
   },
 });
 </script>
 
 <template>
-    <div class="chart-line" ref="lineRef"></div>
+  <a-card :loading="isLoading">
+    <a-radio-group v-model:value="type">
+      <a-radio-button :value="0">销售额</a-radio-button>
+      <a-radio-button :value="1">访问量</a-radio-button>
+    </a-radio-group>
+    <div class="chart-line" ref="chartRef"></div>
+  </a-card>
 </template>
 
 <style lang="scss">
 .chart-line {
-  width: 600px;
+  margin-top: 15px;
+  width: 100%;
   height: 300px;
 }
 </style>

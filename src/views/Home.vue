@@ -22,11 +22,14 @@ export default defineComponent({
 
 <template>
   <div class="page-home">
-    <Summary/>
+    <Summary />
 
+    <!-- <a-row>
+      <a-col :span="12"><SalesAmount /></a-col>
+      <a-col :span="12"><PayAndVisitAmount /></a-col>
+    </a-row> -->
     <!-- 柱形图: 每月销量 -->
     <SalesAmount />
-
     <!-- 折线图: 支付笔数和访问量 -->
     <PayAndVisitAmount />
 
@@ -35,9 +38,11 @@ export default defineComponent({
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "sass:math";
 .page-home {
+  background: #efefef;
   padding: 8px;
+
 }
 </style>

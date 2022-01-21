@@ -72,7 +72,7 @@ export default defineComponent({
 
 <style lang="scss">
 .chart-line {
-  width: 600px;
+  width: 100%;
   height: 300px;
 }
 </style>

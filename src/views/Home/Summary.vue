@@ -16,7 +16,7 @@ interface ResponseData {
     dayTotal: string;
   };
   salesRanking: {
-    total:string;
+    total: string;
     list: [
       {
         title: string;
@@ -68,8 +68,8 @@ export default defineComponent({
 <template>
   <a-row :gutter="16">
     <a-col :xs="24" :sm="12" :lg="6">
-      <div class="card">
-        <a-skeleton active  :loading="isLoading">
+      <a-card class="card" size="small" :loading="isLoading">
+        <template v-if="!isLoading">
           <p class="card__title">总销售额</p>
           <div class="card__content">
             <p class="number">¥ {{ totalSales.total }}</p>
@@ -88,68 +88,82 @@ export default defineComponent({
               /></a-typography-text>
             </span>
           </div>
-          <footer>日销售额:¥ {{ totalSales.dayTotal }}</footer>
-        </a-skeleton>
-      </div>
-    </a-col>
-
-    <a-col :xs="24" :sm="12" :lg="6">
-      <div class="card">
-        <a-skeleton active  :loading="isLoading">
-          <p class="card__title">已支付/总订单数</p>
-          <div class="card__content">
-            <div class="d-flex align-items-center">
-              <a-progress
-                type="dashboard"
-                :percent="Math.round((order.paid / order.total) * 100)"
-                :width="70"
-              />
-              <span class="ml-1">
-                <p>已支付: {{ order.paid }}</p>
-                <p>总订单: {{ order.total }}</p>
-              </span>
-            </div>
-          </div>
-          <footer>今日订单: {{ order.dayTotal }}</footer>
-        </a-skeleton>
-      </div>
-    </a-col>
-
-    <a-col :xs="24" :sm="12" :lg="6">
-      <div class="card">
-        <a-skeleton active  :loading="isLoading">
-          <p class="card__title">销量排行</p>
-          <div class="card__content">
-            <p class="product" v-for="{title,totalSales} in salesRanking.list" :key="title">
-              <span>{{title}}</span>
-              <span>{{totalSales}}单</span>
-            </p>
-          </div>
-          <footer class="d-flex">
-            <span class="flex-1">总计: {{salesRanking.total}}单</span>
-            <a style="color: #1890ff">查看更多</a>
+          <footer class="card__footer">
+            日销售额:¥ {{ totalSales.dayTotal }}
           </footer>
-        </a-skeleton>
+        </template>
+      </a-card>
+    </a-col>
+
+    <a-col :xs="24" :sm="12" :lg="6">
+      <div class="card">
+        <a-card class="card" size="small" :loading="isLoading">
+          <template v-if="!isLoading">
+            <p class="card__title">已支付/总订单数</p>
+            <div class="card__content">
+              <div class="d-flex align-items-center">
+                <a-progress
+                  type="dashboard"
+                  :percent="Math.round((order.paid / order.total) * 100)"
+                  :width="70"
+                />
+                <span class="ml-1">
+                  <p>已支付: {{ order.paid }}</p>
+                  <p>总订单: {{ order.total }}</p>
+                </span>
+              </div>
+            </div>
+            <footer class="card__footer">今日订单: {{ order.dayTotal }}</footer>
+          </template></a-card
+        >
       </div>
     </a-col>
 
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
-        <a-skeleton active  :loading="isLoading">
-          <p class="card__title">活动效果</p>
-          <div class="card__content">
-            <h2>{{activityResults.percent}}%</h2>
-            <a-progress
-              :show-info="false"
-              :stroke-color="{
-                '0%': '#108ee9',
-                '100%': '#87d068',
-              }"
-              :percent="activityResults.percent"
-            />
-          </div>
-          <footer class="d-flex">总计: {{activityResults.totalOrder}}单</footer>
-        </a-skeleton>
+        <a-card class="card" size="small" :loading="isLoading">
+          <template v-if="!isLoading">
+            <p class="card__title">销量排行</p>
+            <div class="card__content">
+              <p
+                class="product"
+                v-for="{ title, totalSales } in salesRanking.list"
+                :key="title"
+              >
+                <span>{{ title }}</span>
+                <span>{{ totalSales }}单</span>
+              </p>
+            </div>
+            <footer class="card__footer">
+              <span class="flex-1">总计: {{ salesRanking.total }}单</span>
+              <a style="color: #1890ff">查看更多</a>
+            </footer>
+          </template></a-card
+        >
+      </div>
+    </a-col>
+
+    <a-col :xs="24" :sm="12" :lg="6">
+      <div class="card">
+        <a-card class="card" size="small" :loading="isLoading">
+          <template v-if="!isLoading">
+            <p class="card__title">活动效果</p>
+            <div class="card__content">
+              <h2>{{ activityResults.percent }}%</h2>
+              <a-progress
+                :show-info="false"
+                :stroke-color="{
+                  '0%': '#108ee9',
+                  '100%': '#87d068',
+                }"
+                :percent="activityResults.percent"
+              />
+            </div>
+            <footer class="card__footer">
+              总计: {{ activityResults.totalOrder }}单
+            </footer>
+          </template></a-card
+        >
       </div>
     </a-col>
   </a-row>
@@ -159,9 +173,9 @@ export default defineComponent({
 @use "sass:math";
 .card {
   overflow: hidden;
-  padding: 8px 16px;
-  box-shadow: 0 0 8px 1px rgba(#000, 0.1);
+  background: #fff;
   margin-bottom: 16px;
+  height: 177px;
   &__title {
     color: #789;
   }
@@ -209,7 +223,8 @@ export default defineComponent({
     }
   }
 
-  > footer {
+  &__footer {
+    display: flex;
     border-top: 1px solid #eee;
     padding-top: 8px;
   }

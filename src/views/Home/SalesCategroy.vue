@@ -64,7 +64,7 @@ export default defineComponent({
 
 <style lang="scss">
 .chart-sales-category {
-  width: 600px;
+  width: 100%;
   height: 300px;
 }
 </style>
