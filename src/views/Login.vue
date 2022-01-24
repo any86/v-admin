@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Form } from "ant-design-vue";
-import { message } from "ant-design-vue";
+import { Form, message } from "ant-design-vue";
 import axios from "axios";
 import { http, setHttpToken, clearHttpToken } from "../http";
 export default defineComponent({
@@ -33,7 +32,8 @@ export default defineComponent({
         this.$store.commit("setUserInfo", user);
         // 存储token
         setHttpToken(token);
-        message.success("登陆成功");
+        // 跳转到首页
+        this.$router.push({ path: "/" });
       } catch (error) {
         if (axios.isAxiosError(error) && 200 === error.response?.status) {
           message.error(error.response?.data);
@@ -49,7 +49,7 @@ export default defineComponent({
 <template>
   <div class="page-login">
     <div class="login-box">
-      <h1>🚀欢迎访问Vue3系统</h1>
+      <h1>欢迎访问Vue3系统</h1>
       <a-form
         class="login-box__form"
         ref="form"
@@ -70,7 +70,11 @@ export default defineComponent({
             placeholder="请输入密码"
           />
         </a-form-item>
-        <a-button type="primary" @click="login" :loading="isLoading"
+        <a-button
+          type="primary"
+          htmlType="submit"
+          @click="login"
+          :loading="isLoading"
           >登录</a-button
         >
       </a-form>
@@ -93,7 +97,7 @@ $bgColor: #eee;
   width: 480px;
   background: #ffffff;
   margin: 20vh auto;
-  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   transition: all 0.5s;
   &:hover {
