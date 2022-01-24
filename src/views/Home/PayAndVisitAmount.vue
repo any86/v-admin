@@ -1,17 +1,29 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import {
+  defineComponent,
+  ref,
+  onMounted,
+  nextTick,
+  onBeforeUnmount,
+} from "vue";
 import * as echarts from "echarts";
+import type { ECharts } from "echarts";
+
 import { http } from "@/http";
 export default defineComponent({
   name: "PayAndVisitAmount",
 
   setup() {
     const lineRef = ref<HTMLElement>();
+    const isLoading = ref(false);
+    let chartLine: ECharts;
 
     onMounted(async () => {
+      isLoading.value = true;
       const response = await http.get<
         { date: string; value: number; type: "客流量" | "支付笔数" }[]
       >("/pay-visit-amount");
+      isLoading.value = false;
 
       const linePay: number[] = [];
       const lineVisit: number[] = [];
@@ -24,11 +36,17 @@ export default defineComponent({
           linePay.push(value);
         }
       });
-
+      await nextTick();
       // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(lineRef.value as HTMLElement);
+      chartLine = echarts.init(lineRef.value as HTMLElement);
       // 绘制图表
-      myChart.setOption({
+      chartLine.setOption({
+        grid: {
+          containLabel: true,
+          left: 0,
+          right: 0,
+          bottom: 16,
+        },
         // 定义2个折线的颜色
         color: ["#1890ff", "#009688"], //[蓝,绿]
         // 图形顶部2个曲线的名称
@@ -60,14 +78,27 @@ export default defineComponent({
           },
         ],
       });
+
+      function _resize() {
+        chartLine.resize();
+      }
+
+      window.addEventListener("resize", _resize);
+
+      onBeforeUnmount(() => {
+        window.removeEventListener("resize", _resize);
+        chartLine.dispose();
+      });
     });
-    return { lineRef };
+    return { lineRef, isLoading };
   },
 });
 </script>
 
 <template>
-  <div class="chart-line" ref="lineRef"></div>
+  <a-card title="24小时支付/访问" :loading="isLoading" size="small">
+    <div class="chart-line" ref="lineRef"></div>
+  </a-card>
 </template>
 
 <style lang="scss">

@@ -1,9 +1,9 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { useChartBar } from "./SalesAmount.config";
+import { useChartBar } from "./SalesAmount.hook";
 
 export default defineComponent({
-  name: "SalesAmount",
+  name: "SalesAndVisitAmount",
 
   setup() {
     const type = ref<0 | 1>(0);
@@ -15,7 +15,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <a-card :loading="isLoading">
+  <a-card size="small" :loading="isLoading" title="近1年销售/访问量">
     <a-radio-group v-model:value="type">
       <a-radio-button :value="0">销售额</a-radio-button>
       <a-radio-button :value="1">访问量</a-radio-button>
