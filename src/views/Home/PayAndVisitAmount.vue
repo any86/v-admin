@@ -25,6 +25,8 @@ export default defineComponent({
       >("/pay-visit-amount");
       isLoading.value = false;
 
+
+      // 处理数据
       const linePay: number[] = [];
       const lineVisit: number[] = [];
       const dates: string[] = [];
@@ -36,6 +38,8 @@ export default defineComponent({
           linePay.push(value);
         }
       });
+
+      // 确保dom被渲染,
       await nextTick();
       // 基于准备好的dom，初始化echarts实例
       chartLine = echarts.init(lineRef.value as HTMLElement);
