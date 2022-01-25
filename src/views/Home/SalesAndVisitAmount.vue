@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { useChartBar } from "./SalesAmount.hook";
+import { useChartBar } from "./SalesAndVisitAmount.hook";
 
 export default defineComponent({
   name: "SalesAndVisitAmount",
@@ -20,12 +20,12 @@ export default defineComponent({
       <a-radio-button :value="0">销售额</a-radio-button>
       <a-radio-button :value="1">访问量</a-radio-button>
     </a-radio-group>
-    <div class="chart-line" ref="chartRef"></div>
+    <div class="chart-bar" ref="chartRef"></div>
   </a-card>
 </template>
 
 <style lang="scss">
-.chart-line {
+.chart-bar {
   margin-top: 15px;
   width: 100%;
   height: 300px;

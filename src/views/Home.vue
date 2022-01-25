@@ -41,7 +41,6 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@use "sass:math";
 .page-home {
   background: #efefef;
   padding: 8px;
