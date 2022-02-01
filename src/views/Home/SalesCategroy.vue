@@ -71,7 +71,7 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       window.removeEventListener("resize", _resize);
-      chartPie.dispose();
+      chartPie?.dispose();
     });
 
     return { salesCategoryChartRef, type, isLoading };

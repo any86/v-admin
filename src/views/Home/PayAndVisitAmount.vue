@@ -25,7 +25,6 @@ export default defineComponent({
       >("/pay-visit-amount");
       isLoading.value = false;
 
-
       // 处理数据
       const linePay: number[] = [];
       const lineVisit: number[] = [];
@@ -82,17 +81,17 @@ export default defineComponent({
           },
         ],
       });
+    });
 
-      function _resize() {
-        chartLine.resize();
-      }
+    function _resize() {
+      chartLine.resize();
+    }
 
-      window.addEventListener("resize", _resize);
+    window.addEventListener("resize", _resize);
 
-      onBeforeUnmount(() => {
-        window.removeEventListener("resize", _resize);
-        chartLine.dispose();
-      });
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", _resize);
+      chartLine?.dispose();
     });
     return { lineRef, isLoading };
   },

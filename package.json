@@ -2,7 +2,7 @@
   "name": "tie-admin",
   "version": "0.0.0",
   "scripts": {
-    "rm:nm":"rimraf node_modules",
+    "rm:nm": "rimraf node_modules",
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
@@ -11,11 +11,13 @@
     "5a.css": "^0.1.19",
     "@ant-design/icons-vue": "^6.0.1",
     "@types/node": "^17.0.2",
+    "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.7",
     "ant-design-vue": "^2.2.8",
     "axios": "^0.24.0",
     "echarts": "^5.2.2",
     "less": "^4.1.2",
+    "nprogress": "^0.2.0",
     "qs": "^6.10.2",
     "vue": "^3.2.16",
     "vue-router": "^4.0.12",

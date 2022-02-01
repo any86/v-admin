@@ -2,7 +2,8 @@
 import { defineComponent } from "vue";
 import { Form, message } from "ant-design-vue";
 import axios from "axios";
-import { http, setHttpToken, clearHttpToken } from "../http";
+import { http } from "../http";
+import { clearToken, saveToken } from "@/auth";
 export default defineComponent({
   name: "Login",
 
@@ -17,13 +18,10 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    clearHttpToken();
-  },
-
   methods: {
     async login() {
       try {
+        clearToken();
         this.isLoading = true;
         const formRef = this.$refs.form as typeof Form;
         await formRef.validate();
@@ -31,7 +29,7 @@ export default defineComponent({
         const { token, user } = response.data;
         this.$store.commit("setUserInfo", user);
         // 存储token
-        setHttpToken(token);
+        saveToken(token);
         // 跳转到首页
         this.$router.push({ path: "/" });
       } catch (error) {

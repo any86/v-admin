@@ -71,7 +71,7 @@ export function useChartBar(chartRef: Ref<HTMLElement | undefined>, type: Ref<0 
 
     onBeforeUnmount(() => {
       window.removeEventListener("resize", _resize);
-      chartBar.dispose();
+      chartBar?.dispose();
     });
 
     return isLoading;
