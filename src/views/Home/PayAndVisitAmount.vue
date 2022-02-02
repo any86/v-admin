@@ -14,7 +14,7 @@ export default defineComponent({
   name: "PayAndVisitAmount",
 
   setup() {
-    const lineRef = ref<HTMLElement>();
+    const lineRef = ref<HTMLElement | null>(null);
     const isLoading = ref(false);
     let chartLine: ECharts;
 
@@ -40,6 +40,7 @@ export default defineComponent({
 
       // 确保dom被渲染,
       await nextTick();
+      if(null === lineRef.value) return; 
       // 基于准备好的dom，初始化echarts实例
       chartLine = echarts.init(lineRef.value as HTMLElement);
       // 绘制图表

@@ -15,7 +15,7 @@ export default defineComponent({
   name: "SalesCategroy",
 
   setup() {
-    const salesCategoryChartRef = ref<HTMLElement>();
+    const salesCategoryChartRef = ref<HTMLElement | null>(null);
     const type = ref<
       "salesTypeData" | "salesTypeDataOnline" | "salesTypeDataOffline"
     >("salesTypeData");
@@ -34,7 +34,8 @@ export default defineComponent({
 
       // 基于准备好的dom，初始化echarts实例
       await nextTick();
-      chartPie = echarts.init(salesCategoryChartRef.value as HTMLElement);
+      if (null === salesCategoryChartRef.value) return;
+      chartPie = echarts.init(salesCategoryChartRef.value);
       // 绘制图表
       watch(
         type,

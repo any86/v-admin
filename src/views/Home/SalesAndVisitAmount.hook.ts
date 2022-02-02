@@ -1,18 +1,18 @@
 import * as echarts from "echarts";
-import type {ECharts} from "echarts";
+import type { ECharts } from "echarts";
 
 import { http } from "@/http";
-import { ref, nextTick, unref, watch, onBeforeUnmount,type Ref } from 'vue';
+import { ref, nextTick, unref, watch, onBeforeUnmount, type Ref } from 'vue';
 
 /**
  * 渲染柱形图
  * @param el 元素
  * @param type getData的索引
  */
-export function useChartBar(chartRef: Ref<HTMLElement | undefined>, type: Ref<0 | 1>) {
+export function useChartBar(chartRef: Ref<HTMLElement | null>, type: Ref<0 | 1>) {
     const isLoading = ref(true);
     const colors = ["#108ee9", '#87d068']
-    let chartBar:ECharts;
+    let chartBar: ECharts;
     function renderBar(type: 0 | 1) {
         isLoading.value = true;
         [getSalesData, getVisitData][type]().then(async ([xData, yData]) => {
@@ -28,13 +28,13 @@ export function useChartBar(chartRef: Ref<HTMLElement | undefined>, type: Ref<0 
             // 但是定义类型的时候有undefined,
             // 所以为了类型推导争取加一个判断
             // 其实也可以直接断言el是HTMLElement
-            if (void 0 !== el) {
+            if (null !== el) {
                 // 基于准备好的dom，初始化echarts实例
                 chartBar = echarts.init(el);
                 // 绘制图表
                 chartBar.setOption({
                     grid: {
-                        containLabel:true,
+                        containLabel: true,
                         left: 0,
                         right: 0,
                         bottom: 16,
@@ -63,15 +63,15 @@ export function useChartBar(chartRef: Ref<HTMLElement | undefined>, type: Ref<0 
     renderBar(type.value);
     watch(type, renderBar);
 
-    function _resize(){
+    function _resize() {
         chartBar.resize();
     }
 
     window.addEventListener("resize", _resize);
 
     onBeforeUnmount(() => {
-      window.removeEventListener("resize", _resize);
-      chartBar?.dispose();
+        window.removeEventListener("resize", _resize);
+        chartBar?.dispose();
     });
 
     return isLoading;

@@ -7,7 +7,7 @@ export default defineComponent({
 
   setup() {
     const type = ref<0 | 1>(0);
-    const chartRef = ref<HTMLElement>();
+    const chartRef = ref<HTMLElement | null>(null);
     const isLoading = useChartBar(chartRef, type);
     return { type, chartRef, isLoading };
   },
