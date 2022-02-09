@@ -42,8 +42,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .page-home {
-  background: #efefef;
-  padding: 8px;
   min-height: 100vh;
 }
 </style>

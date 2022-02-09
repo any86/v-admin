@@ -2,7 +2,7 @@
 import { defineComponent } from "vue";
 import { Form, message } from "ant-design-vue";
 import axios from "axios";
-import { http } from "../http";
+import { http } from "@/http";
 import { clearToken, saveToken } from "@/auth";
 export default defineComponent({
   name: "Login",
