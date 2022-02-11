@@ -64,7 +64,7 @@ export function useChartBar(chartRef: Ref<HTMLElement | null>, type: Ref<0 | 1>)
     watch(type, renderBar);
 
     function _resize() {
-        chartBar.resize();
+        chartBar?.resize();
     }
 
     window.addEventListener("resize", _resize);

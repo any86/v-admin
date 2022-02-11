@@ -65,7 +65,7 @@ export default defineComponent({
     });
 
     function _resize() {
-      chartPie.resize();
+      chartPie?.resize();
     }
 
     window.addEventListener("resize", _resize);

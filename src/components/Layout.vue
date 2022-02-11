@@ -1,11 +1,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { toggleFull } from 'be-full';
 import { CaretDownOutlined, SettingOutlined, UserOutlined, FullscreenOutlined } from '@ant-design/icons-vue';
 import { http } from '@/http';
+import Notices from './Layout/Notices.vue';
 export default defineComponent({
   name: 'Layout',
 
-  components: { CaretDownOutlined, SettingOutlined, UserOutlined, FullscreenOutlined },
+  components: { CaretDownOutlined, SettingOutlined, UserOutlined, FullscreenOutlined, Notices },
 
   data() {
     return {
@@ -15,30 +17,45 @@ export default defineComponent({
   },
 
   async mounted() {
-    const { data } = await http.get('currentUser');
+    const { data } = await http.get('/currentUser');
     this.name = data.name;
     this.avatar = data.avatar;
+  },
+
+  methods: {
+    toggleFull,
+
+    logout() {
+      const ref = this.$route.fullPath;
+      this.$router.push({ path: '/login', query: { ref } });
+    },
   },
 });
 </script>
 
 <template>
   <a-layout>
-    <a-layout-sider class="side" v-model:collapsed="collapsed" :trigger="null" collapsible>
+    <a-layout-sider class="side" collapsible :trigger="null">
       <div class="logo">
-        <img width="36" src="@/assets/logo.png" />
-        <span>宽行教育</span>
+        <!-- <img width="36" src="@/assets/logo.png" /> -->
+        <span>xxx</span>
       </div>
     </a-layout-sider>
-    <a-layout>
-      <a-layout-header class="header">
-        <div class="header__content">
-          <span class="btn-full">
-            <FullscreenOutlined />
-          </span>
 
+    <a-layout>
+      <a-layout-header ref="header" class="header">
+        <a-space class="header__content">
+          <!-- 全屏按钮 -->
+          <a class="btn-full" title="全屏" @click="toggleFull">
+            <FullscreenOutlined class="icon-lg" />
+          </a>
+
+          <!-- 通知 -->
+          <notices />
+
+          <!-- 用户头像 -->
           <a-dropdown>
-            <span class="avatar" @click.prevent>
+            <span class="avatar">
               <img :src="avatar" alt="头像" />
               <span>{{ name }}</span>
             </span>
@@ -51,13 +68,13 @@ export default defineComponent({
                   <a><UserOutlined /> 系统设置</a>
                 </a-menu-item>
                 <a-menu-divider />
-                <a-menu-item>
+                <a-menu-item @click="logout">
                   <a><UserOutlined /> 退出登陆</a>
                 </a-menu-item>
               </a-menu>
             </template>
           </a-dropdown>
-        </div>
+        </a-space>
       </a-layout-header>
       <a-layout-content class="content">
         <router-view> </router-view>
@@ -67,34 +84,41 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scope>
-@mixin buttonHover {
-  padding: 0 16px;
-  &:hover {
-    cursor: pointer;
-    background: #eee;
-  }
-}
 .header {
   position: fixed;
-  z-index: 1;
+  z-index: 86;
   width: 100%;
   background: #fff;
   box-shadow: 0 2px 5px rgba(#000, 0.1);
+  display: flex;
+  justify-content: flex-end;
 
-  &__content {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .btn-full {
+  // 按钮通用样式
+  .btn {
     display: block;
-    margin-right: 16px;
-    @include buttonHover;
+    padding: 0 16px;
+    &:hover {
+      cursor: pointer;
+      background: #eee;
+    }
+  }
+
+  .icon-lg {
+    font-size: 20px;
+  }
+
+  .btn-full {
+    @extend .btn;
+  }
+
+  .btn-bell {
+    @extend .btn;
   }
 
   .avatar {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    @include buttonHover;
+    @extend .btn;
     img {
       height: 28px;
       width: 28px;

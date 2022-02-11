@@ -85,7 +85,7 @@ export default defineComponent({
     });
 
     function _resize() {
-      chartLine.resize();
+      chartLine?.resize();
     }
 
     window.addEventListener("resize", _resize);
