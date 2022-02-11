@@ -1,23 +1,41 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { toggleFull } from 'be-full';
-import { CaretDownOutlined, SettingOutlined, UserOutlined, FullscreenOutlined } from '@ant-design/icons-vue';
-import { http } from '@/http';
+import {
+  CaretDownOutlined,
+  SettingOutlined,
+  UserOutlined,
+  FullscreenOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+} from '@ant-design/icons-vue';
 import Notices from './Layout/Notices.vue';
+import Menu from './Layout/Menu.vue';
+
 export default defineComponent({
   name: 'Layout',
 
-  components: { CaretDownOutlined, SettingOutlined, UserOutlined, FullscreenOutlined, Notices },
+  components: {
+    CaretDownOutlined,
+    SettingOutlined,
+    UserOutlined,
+    FullscreenOutlined,
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+    Notices,
+    Menu,
+  },
 
   data() {
     return {
       name: '',
       avatar: '',
+      collapsed: false,
     };
   },
 
   async mounted() {
-    const { data } = await http.get('/currentUser');
+    const { data } = await this.$http.get('/currentUser');
     this.name = data.name;
     this.avatar = data.avatar;
   },
@@ -35,15 +53,21 @@ export default defineComponent({
 
 <template>
   <a-layout>
-    <a-layout-sider class="side" collapsible :trigger="null">
+    <a-layout-sider class="side" v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo">
         <!-- <img width="36" src="@/assets/logo.png" /> -->
-        <span>xxx</span>
+        <span>xxx后台系统</span>
       </div>
+
+      <!-- 菜单 -->
+      <Menu />
     </a-layout-sider>
 
     <a-layout>
-      <a-layout-header ref="header" class="header">
+      <a-layout-header class="header" style="padding-left: 200px">
+        <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
+        <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
+
         <a-space class="header__content">
           <!-- 全屏按钮 -->
           <a class="btn-full" title="全屏" @click="toggleFull">
@@ -91,7 +115,7 @@ export default defineComponent({
   background: #fff;
   box-shadow: 0 2px 5px rgba(#000, 0.1);
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   // 按钮通用样式
   .btn {

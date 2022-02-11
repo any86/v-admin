@@ -155,7 +155,7 @@ export default defineComponent({
 
 <style lang="scss" scope>
 .list-item {
-  padding: 16px;
+  padding:8px 16px;
   &:hover {
     cursor: pointer;
   }

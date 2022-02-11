@@ -11,7 +11,7 @@ import { ref, nextTick, unref, watch, onBeforeUnmount, type Ref } from 'vue';
  */
 export function useChartBar(chartRef: Ref<HTMLElement | null>, type: Ref<0 | 1>) {
     const isLoading = ref(true);
-    const colors = ["#108ee9", '#87d068']
+    const colors = ["#108ee9", '#ff4d4f']
     let chartBar: ECharts;
     function renderBar(type: 0 | 1) {
         isLoading.value = true;
