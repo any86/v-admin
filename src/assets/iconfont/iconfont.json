@@ -1,0 +1,114 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3935130",
+      "name": "ticket_fill",
+      "font_class": "ticket_fill",
+      "unicode": "e800",
+      "unicode_decimal": 59392
+    },
+    {
+      "icon_id": "4110737",
+      "name": "round_friend_fill",
+      "font_class": "round_friend_fill",
+      "unicode": "e80a",
+      "unicode_decimal": 59402
+    },
+    {
+      "icon_id": "4110738",
+      "name": "round_crown_fill",
+      "font_class": "round_crown_fill",
+      "unicode": "e80b",
+      "unicode_decimal": 59403
+    },
+    {
+      "icon_id": "4110739",
+      "name": "round_link_fill",
+      "font_class": "round_link_fill",
+      "unicode": "e80c",
+      "unicode_decimal": 59404
+    },
+    {
+      "icon_id": "4110740",
+      "name": "round_light_fill",
+      "font_class": "round_light_fill",
+      "unicode": "e80d",
+      "unicode_decimal": 59405
+    },
+    {
+      "icon_id": "4110741",
+      "name": "round_favor_fill",
+      "font_class": "round_favor_fill",
+      "unicode": "e80e",
+      "unicode_decimal": 59406
+    },
+    {
+      "icon_id": "4110743",
+      "name": "round_location_fill",
+      "font_class": "round_location_fill",
+      "unicode": "e80f",
+      "unicode_decimal": 59407
+    },
+    {
+      "icon_id": "4110744",
+      "name": "round_pay_fill",
+      "font_class": "round_pay_fill",
+      "unicode": "e810",
+      "unicode_decimal": 59408
+    },
+    {
+      "icon_id": "4110745",
+      "name": "round_like_fill",
+      "font_class": "round_like_fill",
+      "unicode": "e811",
+      "unicode_decimal": 59409
+    },
+    {
+      "icon_id": "4110746",
+      "name": "round_people_fill",
+      "font_class": "round_people_fill",
+      "unicode": "e812",
+      "unicode_decimal": 59410
+    },
+    {
+      "icon_id": "4110748",
+      "name": "round_rank_fill",
+      "font_class": "round_rank_fill",
+      "unicode": "e813",
+      "unicode_decimal": 59411
+    },
+    {
+      "icon_id": "4110749",
+      "name": "round_redpacket_fill",
+      "font_class": "round_redpacket_fill",
+      "unicode": "e814",
+      "unicode_decimal": 59412
+    },
+    {
+      "icon_id": "4110750",
+      "name": "round_skin_fill",
+      "font_class": "round_skin_fill",
+      "unicode": "e815",
+      "unicode_decimal": 59413
+    },
+    {
+      "icon_id": "4930640",
+      "name": "goods_hot_fill",
+      "font_class": "goods_hot_fill",
+      "unicode": "e816",
+      "unicode_decimal": 59414
+    },
+    {
+      "icon_id": "4930641",
+      "name": "ticket_money_fill",
+      "font_class": "ticket_money_fill",
+      "unicode": "e817",
+      "unicode_decimal": 59415
+    }
+  ]
+}

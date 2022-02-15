@@ -34,6 +34,12 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    sideOffsetX(): string {
+      return (this.collapsed ? 80 : 200) + 'px';
+    },
+  },
+
   async mounted() {
     const { data } = await this.$http.get('/currentUser');
     this.name = data.name;
@@ -42,6 +48,13 @@ export default defineComponent({
 
   methods: {
     toggleFull,
+
+    /**
+     * 切换菜单的折叠/展开
+     */
+    collapseMenu() {
+      this.collapsed = !this.collapsed;
+    },
 
     logout() {
       const ref = this.$route.fullPath;
@@ -55,8 +68,8 @@ export default defineComponent({
   <a-layout>
     <a-layout-sider class="side" v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo">
-        <!-- <img width="36" src="@/assets/logo.png" /> -->
-        <span>xxx后台系统</span>
+        <img width="32" src="@/assets/logo.png" />
+        <span v-show="!collapsed">Vue3 Admin</span>
       </div>
 
       <!-- 菜单 -->
@@ -64,9 +77,9 @@ export default defineComponent({
     </a-layout-sider>
 
     <a-layout>
-      <a-layout-header class="header" style="padding-left: 200px">
-        <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
-        <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
+      <a-layout-header class="header" :style="{ paddingLeft: sideOffsetX }">
+        <menu-unfold-outlined v-if="collapsed" class="font-1 ml-3" @click="collapseMenu" />
+        <menu-fold-outlined v-else class="font-1 ml-3" @click="collapseMenu" />
 
         <a-space class="header__content">
           <!-- 全屏按钮 -->
@@ -100,7 +113,7 @@ export default defineComponent({
           </a-dropdown>
         </a-space>
       </a-layout-header>
-      <a-layout-content class="content">
+      <a-layout-content class="content" :style="{ marginLeft: sideOffsetX }">
         <router-view> </router-view>
       </a-layout-content>
     </a-layout>
@@ -116,7 +129,8 @@ export default defineComponent({
   box-shadow: 0 2px 5px rgba(#000, 0.1);
   display: flex;
   justify-content: space-between;
-
+  align-items: center;
+  transition: padding 200ms;
   // 按钮通用样式
   .btn {
     display: block;
@@ -168,10 +182,12 @@ export default defineComponent({
     display: flex;
     align-items: center;
     img {
+      margin: auto;
       display: block;
     }
     span {
-      margin-left: 4px;
+      flex: 1;
+      padding-left: 4px;
       font-size: 20px;
       letter-spacing: 1px;
     }
@@ -179,9 +195,9 @@ export default defineComponent({
 }
 
 .content {
+  transition: margin 200ms;
   margin-top: 64px;
   padding: 24px;
-  margin-left: 200px;
   &--grow {
     margin-left: 40px;
   }

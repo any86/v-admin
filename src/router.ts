@@ -18,6 +18,16 @@ const router = createRouter({
                 path: '/',
                 component: () => import('./views/Home.vue'),
             },
+            {
+                name: 'User',
+                path: '/user',
+                component: () => import('./views/User.vue'),
+            },
+            {
+                name: 'Menu',
+                path: '/menu',
+                component: () => import('./views/Menu.vue'),
+            },
         ]
     },
     {
@@ -25,8 +35,6 @@ const router = createRouter({
         path: '/un-auth',
         component: () => import('./views/UnAuth.vue'),
     },
-        // { path: '/:pathMatch(.*)*', name: '404', component: () => import('./views/404.vue') },
-
     ],
 });
 

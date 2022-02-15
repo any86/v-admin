@@ -464,6 +464,11 @@ are-we-there-yet@^3.0.0:
     delegates "^1.0.0"
     readable-stream "^3.6.0"
 
+arr2tree@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.npmjs.org/arr2tree/-/arr2tree-0.0.12.tgz#cd6e7fa5f2679dcfc3bbfe59571c9e0dfb27134b"
+  integrity sha512-j8i/8UCf0aKCv2UOfAgTU9VBfVGzpiCE33ydBMlcJ4ryLASbVFusg6kPJOd8MGhXyucVozSRsur0OakppT9A+g==
+
 array-tree-filter@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmmirror.com/array-tree-filter/-/array-tree-filter-2.1.0.tgz#873ac00fec83749f255ac8dd083814b4f6329190"
