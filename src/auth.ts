@@ -107,6 +107,8 @@ export function clearToken() {
     Reflect.deleteProperty(http.defaults.headers.common, HTTP_TOKEN_NAME);
 }
 
+export const logout = clearToken;
+
 /**
  * 获取token
  * @returns token

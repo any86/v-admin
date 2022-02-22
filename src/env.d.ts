@@ -6,3 +6,7 @@ declare module '*.vue' {
   export default component
 }
 
+
+interface KV {
+  [k: string | number | symbol]: unknown;
+}

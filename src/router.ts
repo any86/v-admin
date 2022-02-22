@@ -20,12 +20,12 @@ const router = createRouter({
             },
             {
                 name: 'User',
-                path: '/user',
+                path: '/system/user',
                 component: () => import('./views/User.vue'),
             },
             {
                 name: 'Menu',
-                path: '/menu',
+                path: '/system/menu',
                 component: () => import('./views/Menu.vue'),
             },
         ]

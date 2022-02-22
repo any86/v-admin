@@ -66,7 +66,7 @@ export default defineComponent({
 
 <template>
   <a-menu class="menu" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :mode="mode">
-    <template v-for="menu in menuData" :key="menu.id">
+    <template v-for="menu in menuData">
       <!-- 有下级菜单 -->
       <a-sub-menu v-if="menu.children?.length > 0" :key="menu.id" :title="menu.name">
         <template #icon>
@@ -81,12 +81,14 @@ export default defineComponent({
       </a-sub-menu>
 
       <!-- 无下级菜单 -->
-      <a-menu-item v-else :key="menu.id" @click="$router.push(menu.path)">
-        {{ menu.name }}
-        <template #icon>
-          <span> <i class="iconfont" :class="[menu.icon]"></i></span>
-        </template>
-      </a-menu-item>
+      <template v-else>
+        <a-menu-item :key="menu.id" @click="$router.push(menu.path)">
+          {{ menu.name }}
+          <template #icon>
+            <span> <i class="iconfont" :class="[menu.icon]"></i></span>
+          </template>
+        </a-menu-item>
+      </template>
     </template>
   </a-menu>
 </template>

@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons-vue';
 import Notices from './Layout/Notices.vue';
 import Menu from './Layout/Menu.vue';
+import { logout } from '@/auth';
 
 export default defineComponent({
   name: 'Layout',
@@ -47,7 +48,9 @@ export default defineComponent({
   },
 
   methods: {
-    toggleFull,
+    toggleFull() {
+      toggleFull();
+    },
 
     /**
      * 切换菜单的折叠/展开
@@ -59,6 +62,7 @@ export default defineComponent({
     logout() {
       const ref = this.$route.fullPath;
       this.$router.push({ path: '/login', query: { ref } });
+      logout();
     },
   },
 });

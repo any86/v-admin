@@ -20,6 +20,9 @@ createAuth({
 
     async isAuth(to) {
         const { status } = await http.post('/auth', to);
+        // await new Promise((resolve)=>{
+        //     resolve(123)
+        // });
         return 200 == status;
     },
 });

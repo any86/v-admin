@@ -23,6 +23,6 @@ http.interceptors.response.use(function (response) {
   }
   return response;
 }, function (error) {
-  message.error(`操作失败, ${error.response.data}`);
+  message.error(`操作失败,请联系管理员`);
   return Promise.reject(error);
 });
