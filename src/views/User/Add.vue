@@ -53,7 +53,7 @@ async function save() {
 }
 
 function reset() {
-  formData.value = {...DEFAULT_FORM_DATA};
+  formData.value = { ...DEFAULT_FORM_DATA };
   formRef.value?.resetFields();
 }
 
@@ -65,7 +65,7 @@ defineExpose({
 </script>
 
 <template>
-  <a-modal v-model:visible="isShow" title="新增用户">
+  <a-modal v-model:visible="isShow" title="添加用户">
     <a-form ref="formRef" :model="formData" :label-col="{ span: 3 }">
       <a-form-item label="姓名" name="userName" :rules="[{ required: true, message: '请输入账号' }]">
         <a-input v-model:value="formData.userName" placeholder="请输入账号" allowClear></a-input>
@@ -86,7 +86,13 @@ defineExpose({
       </a-form-item>
 
       <a-form-item label="年龄" name="age" :rules="[{ required: true, message: '请输入年龄' }]">
-        <a-input v-model:value="formData.age" placeholder="请输入年龄" type="number" allowClear></a-input>
+        <a-input-number
+          v-model:value="formData.age"
+          placeholder="请输入年龄"
+          min="18"
+          max="99"
+          allowClear
+        ></a-input-number>
       </a-form-item>
 
       <a-form-item label="邮箱" name="email" :rules="[{ required: true, message: '请输入邮箱' }]">
@@ -101,7 +107,6 @@ defineExpose({
         <http-selector
           v-model="formData.roleIds"
           placeholder="请选择部门"
-          mode="multiple"
           :get-options="getRoleOptions"
         />
       </a-form-item>

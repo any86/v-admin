@@ -2,7 +2,15 @@
 import { ref, h, resolveComponent, watch } from 'vue';
 import { http } from '@/http';
 import { type TableColumnsType } from 'ant-design-vue';
-import { EditOutlined, EyeOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+import {
+  EditOutlined,
+  EyeOutlined,
+  DeleteOutlined,
+  SearchOutlined,
+  PlusOutlined,
+  UpOutlined,
+  DownOutlined,
+} from '@ant-design/icons-vue';
 import Add from './User/Add.vue';
 import Detail from './User/Detail.vue';
 import Edit from './User/Edit.vue';
@@ -189,7 +197,7 @@ const editRef = ref<typeof Edit | undefined>();
 
     <a-card>
       <a-space>
-        <a-button type="primary" @click="addRef?.show">添加用户</a-button>
+        <a-button type="primary" @click="addRef?.show"><plus-outlined />添加用户</a-button>
         <a-popconfirm title="确定要删除吗?" ok-text="确定" cancel-text="取消" @confirm="remove(selectedRowKeys)">
           <a-button v-show="selectedRowKeys.length > 0" type="primary" danger
             >批量删除({{ selectedRowKeys.length }}条)</a-button
@@ -252,10 +260,11 @@ const editRef = ref<typeof Edit | undefined>();
             <a-form-item>
               <a-space>
                 <a-button :loading="isLoading" @click="reset">重置</a-button>
-                <a-button type="primary" :loading="isLoading" @click="getList">查询</a-button>
-                <a-button @click="isShowMoreCondition = !isShowMoreCondition" type="link">{{
-                  isShowMoreCondition ? '收起' : '展开'
-                }}</a-button>
+                <a-button type="primary" :loading="isLoading" @click="getList"><search-outlined />查询</a-button>
+                <a-button @click="isShowMoreCondition = !isShowMoreCondition" type="link">
+                  <template v-if="isShowMoreCondition"><up-outlined/>收起</template>
+                  <template v-else><down-outlined/>展开</template>
+                </a-button>
               </a-space>
             </a-form-item>
           </a-col>

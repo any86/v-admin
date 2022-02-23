@@ -47,6 +47,7 @@ defineExpose({
 <template>
   <a-drawer size="large" v-model:visible="isShow" title="详情">
     <a-skeleton :loading="isLoading">
+      <a-avatar class="my-2" shape="square" :size="128" :src="dataSource?.avatar" alt="头像"> </a-avatar>
       <a-descriptions v-if="void 0 !== dataSource" :column="{ xs: 1, sm: 2 }">
         <a-descriptions-item label="账号">
           {{ dataSource.userName }}
