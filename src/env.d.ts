@@ -6,6 +6,11 @@ declare module '*.vue' {
   export default component
 }
 
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string
+}
+
+
 
 interface KV {
   [k: string | number | symbol]: unknown;

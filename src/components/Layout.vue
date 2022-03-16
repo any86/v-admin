@@ -72,7 +72,7 @@ export default defineComponent({
   <a-layout>
     <a-layout-sider class="side" v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo">
-        <img width="32" src="@/assets/logo.png" />
+        <!-- <img width="32" src="@/assets/logo.png" /> -->
         <span v-show="!collapsed">Vue3 Admin</span>
       </div>
 

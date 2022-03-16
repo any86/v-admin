@@ -1,7 +1,7 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
-import { http } from "@/http";
-import { CaretUpFilled, CaretDownFilled } from "@ant-design/icons-vue";
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { http } from '@/http';
+import { CaretUpFilled, CaretDownFilled } from '@ant-design/icons-vue';
 // 接口返回数据
 interface ResponseData {
   totalSales: {
@@ -39,7 +39,7 @@ interface ResponseData {
 }
 
 export default defineComponent({
-  name: "Summary",
+  name: 'Summary',
 
   components: {
     CaretUpFilled,
@@ -50,7 +50,7 @@ export default defineComponent({
     const isLoading = ref(true);
     const responseData = ref<ResponseData>();
     onMounted(async () => {
-      const response = await http.get<ResponseData>("/summary");
+      const response = await http.get<ResponseData>('/summary');
       isLoading.value = false;
       responseData.value = response.data;
     });
@@ -69,28 +69,24 @@ export default defineComponent({
   <a-row :gutter="16">
     <a-col :xs="24" :sm="12" :lg="6">
       <a-card class="card" size="small" :loading="isLoading">
-        <template v-if="!isLoading">
+        <template v-if="!isLoading && totalSales">
           <p class="card__title">总销售额</p>
           <div class="card__content">
             <p class="number">¥ {{ totalSales.total }}</p>
             <span
               >周同比
-              <a-typography-text
-                :type="totalSales.weekCompared > 0 ? 'danger' : 'success'"
+              <a-typography-text :type="~~totalSales.weekCompared > 0 ? 'danger' : 'success'"
                 >{{ totalSales.weekCompared }}%<CaretUpFilled
               /></a-typography-text>
             </span>
             <span>
               日同比
-              <a-typography-text
-                :type="totalSales.dayCompared > 0 ? 'danger' : 'success'"
+              <a-typography-text :type="~~totalSales.dayCompared > 0 ? 'danger' : 'success'"
                 >{{ totalSales.dayCompared }}%<CaretDownFilled
               /></a-typography-text>
             </span>
           </div>
-          <footer class="card__footer">
-            日销售额:¥ {{ totalSales.dayTotal }}
-          </footer>
+          <footer class="card__footer">日销售额:¥ {{ totalSales.dayTotal }}</footer>
         </template>
       </a-card>
     </a-col>
@@ -98,15 +94,11 @@ export default defineComponent({
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
         <a-card class="card" size="small" :loading="isLoading">
-          <template v-if="!isLoading">
+          <template v-if="!isLoading && order">
             <p class="card__title">已支付/总订单数</p>
             <div class="card__content">
               <div class="d-flex align-items-center">
-                <a-progress
-                  type="dashboard"
-                  :percent="Math.round((order.paid / order.total) * 100)"
-                  :width="70"
-                />
+                <a-progress type="dashboard" :percent="Math.round((~~order.paid / ~~order.total) * 100)" :width="70" />
                 <span class="ml-1">
                   <p>已支付: {{ order.paid }}</p>
                   <p>总订单: {{ order.total }}</p>
@@ -122,14 +114,10 @@ export default defineComponent({
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
         <a-card class="card" size="small" :loading="isLoading">
-          <template v-if="!isLoading">
+          <template v-if="!isLoading && salesRanking">
             <p class="card__title">销量排行</p>
             <div class="card__content">
-              <p
-                class="product"
-                v-for="{ title, totalSales } in salesRanking.list"
-                :key="title"
-              >
+              <p class="product" v-for="{ title, totalSales } in salesRanking.list" :key="title">
                 <span>{{ title }}</span>
                 <span>{{ totalSales }}单</span>
               </p>
@@ -146,7 +134,7 @@ export default defineComponent({
     <a-col :xs="24" :sm="12" :lg="6">
       <div class="card">
         <a-card class="card" size="small" :loading="isLoading">
-          <template v-if="!isLoading">
+          <template v-if="!isLoading && activityResults">
             <p class="card__title">活动效果</p>
             <div class="card__content">
               <h2>{{ activityResults.percent }}%</h2>
@@ -159,9 +147,7 @@ export default defineComponent({
                 :percent="activityResults.percent"
               />
             </div>
-            <footer class="card__footer">
-              总计: {{ activityResults.totalOrder }}单
-            </footer>
+            <footer class="card__footer">总计: {{ activityResults.totalOrder }}单</footer>
           </template></a-card
         >
       </div>
@@ -170,7 +156,7 @@ export default defineComponent({
 </template>
 
 <style lang="scss">
-@use "sass:math";
+@use 'sass:math';
 .card {
   overflow: hidden;
   background: #fff;
@@ -192,7 +178,7 @@ export default defineComponent({
       align-items: center;
       &::before {
         $size: 10px;
-        content: "";
+        content: '';
         display: inline-block;
         width: $size;
         height: math.div($size, 2);

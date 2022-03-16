@@ -56,7 +56,7 @@ const value = computed(() => {
 <template>
   <a-spin :spinning="isLoading">
     <a-select
-      :value="aa"
+      :value="modelValue"
       @update:value="change"
       @focus="_getOptions"
       allowClear
