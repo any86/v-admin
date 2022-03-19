@@ -7,7 +7,7 @@ interface OptionItem {
 }
 
 interface Props {
-  modelValue?: string | null | string[];
+  value?: string | number | null | string[];
   // 默认显示文字
   defaultText?: string;
   immediate?: boolean;
@@ -15,15 +15,13 @@ interface Props {
 }
 
 interface Emit {
-  (type: 'update:modelValue', value: string): void;
+  (type: 'update:value', value: string | string[]): void;
   (type: 'error', error: unknown): void;
 }
-
 const props = defineProps<Props>();
 const emit = defineEmits<Emit>();
-
 function change(value: string) {
-  emit('update:modelValue', value);
+  emit('update:value', value);
 }
 
 // 获取选项
@@ -46,21 +44,21 @@ onBeforeMount(() => {
     _getOptions();
   }
 });
-
 // 默认显示文字
 const value = computed(() => {
-  return !!options.value?.length ? props.modelValue : props.defaultText;
+  console.log(props);
+  return !!options.value?.length ? props.value : props.defaultText;
 });
 </script>
 
 <template>
   <a-spin :spinning="isLoading">
     <a-select
-      :value="modelValue"
+      :value="value"
       @update:value="change"
       @focus="_getOptions"
       allowClear
-      :mode="Array.isArray(value) ? 'multiple' : void 0"
+      :mode="Array.isArray(value) ? 'multiple' : $attrs.model"
       v-bind="$attrs"
     >
       <a-select-option v-for="{ label, value } in options" :key="value" :value="value">{{ label }}</a-select-option>

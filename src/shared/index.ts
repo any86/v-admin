@@ -4,7 +4,7 @@ import { http } from '@/http';
  * @returns promise 列表
  */
 export async function getPositionOptions() {
-    const { data } = await http.get<{ id: string; name: string }[]>('/position');
+    const { data } = await http.get<{ id: string; name: string }[]>('/global/position');
     return data.map(({ id, name }) => {
         return { label: name, value: id };
     });
@@ -15,7 +15,7 @@ export async function getPositionOptions() {
  * @returns promise 列表
  */
 export async function getDepartmentOptions() {
-    const { data } = await http.get<{ id: string; name: string }[]>('/department');
+    const { data } = await http.get<{ id: string; name: string }[]>('/global/department');
     return data.map(({ id, name }) => {
         return { label: name, value: id };
     });
@@ -26,7 +26,7 @@ export async function getDepartmentOptions() {
  * @returns promise 列表
  */
 export async function getRoleOptions() {
-    const { data } = await http.get<{ id: string; name: string }[]>('/role');
+    const { data } = await http.get<{ id: string; name: string }[]>('/global/role');
     return data.map(({ id, name }) => {
         return { label: name, value: id };
     });

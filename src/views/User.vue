@@ -249,7 +249,7 @@ const editRef = ref<typeof Edit | undefined>();
           <a-col v-show="isShowMoreCondition" :span="8">
             <a-form-item label="部门">
               <http-selector
-                v-model="formDataCondition.department"
+                v-model:value="formDataCondition.department"
                 placeholder="请选择部门"
                 :get-options="getDepartmentOptions"
               />
