@@ -1,9 +1,6 @@
 import type { InputProps, FormProps, FormItemProps, TableProps } from 'ant-design-vue';
 import type { VNode, Component as C1 } from 'vue';
 
-type RowSelection = TableProps['rowSelection'];
-
-
 export interface KV<T = any> {
   [k: string | number]: T;
 }

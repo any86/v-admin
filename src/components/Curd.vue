@@ -203,7 +203,7 @@ async function showOne(row: KV) {
         "
       >
         <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex === 'operation'">
+          <template v-if="column.dataIndex === 'operation' || column.key === 'operation'">
             <slot name="row-buttons-before" v-bind="record"></slot>
 
             <a-button v-if="r.getOne" type="link" @click="showOne(record)"><eye-outlined />查看</a-button>

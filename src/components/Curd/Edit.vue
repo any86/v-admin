@@ -10,7 +10,7 @@ interface Props extends UProps {
   modelValue: KV;
   formProps?: FormProps;
   items: () => NFormItem[];
-  done: (formData: KV) => Promise<unknown>;
+  done: (formData: KV) => Promise<string>;
   getDefaultValue: (formData: KV) => Promise<KV>;
 }
 
