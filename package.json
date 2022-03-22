@@ -16,7 +16,7 @@
     "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.7",
     "ant-design-vue": "^3.0.0-beta.9",
-    "arr2tree": "^0.0.12",
+    "arr2tree": "^0.1.13",
     "await-to-js": "^3.0.0",
     "axios": "^0.24.0",
     "be-full": "^0.1.3",

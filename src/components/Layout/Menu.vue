@@ -48,7 +48,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    const { data } = await this.$http.get('/menu');
+    const { data } = await this.$http.get('/global/menu');
     this.menuData = arr2tree(data, {
       transform: (node) => {
         if (node.path) {

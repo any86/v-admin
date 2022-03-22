@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { h } from 'vue';
 import Curd from '@/components/Curd.vue';
+import HttpSelector from '@/components/HttpSelector.vue';
 import { http } from '@/http';
 import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types';
 import { Tag } from 'ant-design-vue';
@@ -52,6 +53,7 @@ const c: CProps = {
   items: () => [
     { is: 'a-input', name: 'name', label: '角色名' },
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
+
   ],
 };
 
@@ -63,7 +65,7 @@ const u: UProps = {
   },
 
   async done() {
-    const { data } = await http.post('/role');
+    const { data } = await http.put('/role');
     return data.msg;
   },
 
