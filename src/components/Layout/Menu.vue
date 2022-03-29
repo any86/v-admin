@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import arr2tree from 'arr2tree';
+import arr2tree from '@any86/array-to-tree';
 
 export default defineComponent({
   name: 'Menu',

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h } from 'vue';
 import Curd from '@/components/Curd.vue';
-import arr2tree from 'arr2tree';
+import arr2tree from '@any86/array-to-tree';
 import HttpSelector from '@/components/HttpSelector.vue';
 import { http } from '@/http';
 import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types';
