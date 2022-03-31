@@ -119,6 +119,20 @@ const FormDataEdit = reactive({});
 
 // 新增
 const addRef = ref<typeof Add | undefined>();
+const isAddFormLoading = ref(false);
+async function showAddForm() {
+  try {
+    isAddFormLoading.value = true;
+    if (props.c?.before) {
+      await props.c.before();
+    }
+    addRef.value?.show();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    isAddFormLoading.value = false;
+  }
+}
 
 // 编辑
 const editRef = ref<typeof Edit | undefined>();
@@ -152,7 +166,7 @@ async function showOne(row: KV) {
     <a-card>
       <!-- 批量操作 -->
       <a-space>
-        <a-button v-if="c" type="primary" @click="addRef?.show"><plus-outlined />新建</a-button>
+        <a-button v-if="c" :loading="isAddFormLoading" type="primary" @click="showAddForm"><plus-outlined />新建</a-button>
         <a-popconfirm
           v-if="void 0 !== d"
           title="确定要删除吗?"
