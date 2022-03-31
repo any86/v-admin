@@ -63,9 +63,9 @@ const c: CProps = {
   },
 
   items: () => [
-    { is: 'a-input', name: 'name', label: '菜单名称' },
-    { is: IconFontSelector, name: 'icon', label: '图标名', props:{src: '../assets/iconfont/iconfont.json' }},
-    { is: 'a-input', name: 'path', label: '路径' },
+    { is: 'a-input', name: 'name', label: '菜单名称',rules:[{required:true,message:'必填项'}] },
+    { is: 'a-input', name: 'path', label: '路径' ,rules:[{required:true,message:'必填项'}] },
+    { is: IconFontSelector, name: 'icon', label: '图标名'},
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
   ],
 };

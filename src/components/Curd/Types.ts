@@ -17,6 +17,7 @@ export interface NFormItem extends FormItemProps {
  * "新增"表单组件的属性
  */
 export interface CProps {
+  before?:()=>Promise<void>;
   formProps?: FormProps;
   items: () => NFormItem[];
   done: (formData: KV) => Promise<string>;
@@ -30,6 +31,7 @@ export interface UProps extends CProps {
 }
 
 export interface RProps extends TableProps {
+  before?:()=>Promise<void>;
   // 列配置
   // 筛选条件配置
   conditionItems?: () => NFormItem[];

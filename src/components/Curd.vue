@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch, computed } from 'vue';
+import { ref, reactive, watch, computed, onBeforeMount } from 'vue';
 import { message } from 'ant-design-vue';
 
 import {
@@ -18,6 +18,8 @@ import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types
 
 interface Props {
   primaryKey: string;
+
+  loading?: boolean;
 
   c?: CProps;
 
@@ -150,93 +152,96 @@ async function showOne(row: KV) {
 </script>
 
 <template>
-  <article class="curd">
-    <a-drawer v-if="r.getOne" v-model:visible="isShowOne" title="详情" width="50%">
-      <a-skeleton :loading="isOneLoading">
-        <slot name="one" v-bind="oneData"></slot>
-      </a-skeleton>
-    </a-drawer>
+  <a-skeleton :loading="loading">
+    <article class="curd">
+      <a-drawer v-if="r.getOne" v-model:visible="isShowOne" title="详情" width="50%">
+        <a-skeleton :loading="isOneLoading">
+          <slot name="one" v-bind="oneData"></slot>
+        </a-skeleton>
+      </a-drawer>
 
-    <!-- 编辑 -->
-    <Edit ref="editRef" v-if="u" v-model="FormDataEdit" v-bind="u" @success="getList" />
+      <!-- 编辑 -->
+      <Edit ref="editRef" v-if="u" v-model="FormDataEdit" v-bind="u" @success="getList" />
 
-    <!-- 新增 -->
-    <Add ref="addRef" v-if="c" v-model="FormDataAdd" v-bind="c" @success="getList" />
+      <!-- 新增 -->
+      <Add ref="addRef" v-if="c" v-model="FormDataAdd" v-bind="c" @success="getList" />
 
-    <a-card>
-      <!-- 批量操作 -->
-      <a-space>
-        <a-button v-if="c" :loading="isAddFormLoading" type="primary" @click="showAddForm"><plus-outlined />新建</a-button>
-        <a-popconfirm
-          v-if="void 0 !== d"
-          title="确定要删除吗?"
-          ok-text="确定"
-          cancel-text="取消"
-          @confirm="remove(selectedRowKeys)"
-        >
-          <a-button v-show="selectedRowKeys.length > 0" type="primary" danger
-            >批量删除({{ selectedRowKeys.length }}条)</a-button
+      <a-card>
+        <!-- 批量操作 -->
+        <a-space>
+          <a-button v-if="c" :loading="isAddFormLoading" type="primary" @click="showAddForm"
+            ><plus-outlined />新建</a-button
           >
-        </a-popconfirm>
-      </a-space>
+          <a-popconfirm
+            v-if="void 0 !== d"
+            title="确定要删除吗?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="remove(selectedRowKeys)"
+          >
+            <a-button v-show="selectedRowKeys.length > 0" type="primary" danger
+              >批量删除({{ selectedRowKeys.length }}条)</a-button
+            >
+          </a-popconfirm>
+        </a-space>
 
-      <!-- 筛选条件 -->
-      <n-form
-        class="mt-2"
-        v-model="formDataCondition"
-        v-if="r.conditionItems"
-        :items="r.conditionItems"
-        layout="inline"
-        :label-col="{ span: 5 }"
-      >
-        <template #after>
-          <a-form-item>
-            <a-space>
-              <a-button :loading="isLoading" @click="reset">重置</a-button>
-              <a-button type="primary" :loading="isLoading" @click="getList"><search-outlined />查询</a-button>
-              <!-- <a-button @click="isShowMoreCondition = !isShowMoreCondition" type="link">
+        <!-- 筛选条件 -->
+        <n-form
+          class="mt-2"
+          v-model="formDataCondition"
+          v-if="r.conditionItems"
+          :items="r.conditionItems"
+          layout="inline"
+          :label-col="{ span: 5 }"
+        >
+          <template #after>
+            <a-form-item>
+              <a-space>
+                <a-button :loading="isLoading" @click="reset">重置</a-button>
+                <a-button type="primary" :loading="isLoading" @click="getList"><search-outlined />查询</a-button>
+                <!-- <a-button @click="isShowMoreCondition = !isShowMoreCondition" type="link">
                 <template v-if="isShowMoreCondition"><up-outlined />收起</template>
                 <template v-else><down-outlined />展开</template>
               </a-button> -->
-            </a-space>
-          </a-form-item>
-        </template>
-      </n-form>
-      <!-- 表格数据 -->
-      <a-table
-        class="mt-2"
-        :loading="isLoading"
-        :pagination="{ ...r.pagination, ...pagination }"
-        :columns="r.columns"
-        :dataSource="dataSouce"
-        :row-key="(row:KV) => row[primaryKey]"
-        :row-selection="
-          r.hideRowSelection ? null : { selectedRowKeys, onChange: onTableSelectChange, ...r.rowSelection }
-        "
-      >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex === 'operation' || column.key === 'operation'">
-            <slot name="row-buttons-before" v-bind="record"></slot>
-
-            <a-button v-if="r.getOne" type="link" @click="showOne(record)"><eye-outlined />查看</a-button>
-
-            <a-button v-if="void 0 !== u" type="link" size="small" @click="editRef?.show(record)">
-              <edit-outlined />编辑</a-button
-            >
-            <a-popconfirm
-              v-if="void 0 !== d"
-              title="确定要删除吗?"
-              ok-text="确定"
-              cancel-text="取消"
-              @confirm="remove([record[primaryKey]], record)"
-            >
-              <a-button type="link" size="small"><delete-outlined />删除</a-button>
-            </a-popconfirm>
+              </a-space>
+            </a-form-item>
           </template>
-        </template>
-      </a-table>
+        </n-form>
+        <!-- 表格数据 -->
+        <a-table
+          class="mt-2"
+          :loading="isLoading"
+          :pagination="{ ...r.pagination, ...pagination }"
+          :columns="r.columns"
+          :dataSource="dataSouce"
+          :row-key="(row:KV) => row[primaryKey]"
+          :row-selection="
+            r.hideRowSelection ? null : { selectedRowKeys, onChange: onTableSelectChange, ...r.rowSelection }
+          "
+        >
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.dataIndex === 'operation' || column.key === 'operation'">
+              <slot name="row-buttons-before" v-bind="record"></slot>
 
-      <!-- <p class="mt-2" align="right">
+              <a-button v-if="r.getOne" type="link" @click="showOne(record)"><eye-outlined />查看</a-button>
+
+              <a-button v-if="void 0 !== u" type="link" size="small" @click="editRef?.show(record)">
+                <edit-outlined />编辑</a-button
+              >
+              <a-popconfirm
+                v-if="void 0 !== d"
+                title="确定要删除吗?"
+                ok-text="确定"
+                cancel-text="取消"
+                @confirm="remove([record[primaryKey]], record)"
+              >
+                <a-button type="link" size="small"><delete-outlined />删除</a-button>
+              </a-popconfirm>
+            </template>
+          </template>
+        </a-table>
+
+        <!-- <p class="mt-2" align="right">
         <a-pagination
           v-model:current="pageCurrent"
           :defaultPageSize="pageSize"
@@ -244,8 +249,9 @@ async function showOne(row: KV) {
           @showSizeChange="onPageSizeChange"
         />
       </p> -->
-    </a-card>
-  </article>
+      </a-card>
+    </article>
+  </a-skeleton>
 </template>
 
 <style lang="scss">

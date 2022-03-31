@@ -1,11 +1,29 @@
 <script setup lang="ts">
-import { h } from 'vue';
+import { h, reactive, ref, onBeforeMount } from 'vue';
+import arr2tree from '@any86/array-to-tree';
 import Curd from '@/components/Curd.vue';
 import HttpSelector from '@/components/HttpSelector.vue';
 import { http } from '@/http';
 import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types';
 import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
+
+let treeData = reactive<KV[]>([]);
+const loading = ref(false);
+onBeforeMount(async () => {
+  loading.value = true;
+  const { data } = await http.get('/global/menu');
+  treeData = arr2tree(data, {
+    transform(node) {
+      node.title = node.name;
+      node.key = node.id;
+      return node;
+    },
+  });
+  loading.value = false;
+  console.log(treeData);
+});
+
 const r: RProps = {
   columns: [
     {
@@ -53,6 +71,18 @@ const c: CProps = {
   items: () => [
     { is: 'a-input', name: 'name', label: '角色名' },
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
+    {
+      is: 'a-tree',
+      name: 'menuId',
+      modelName: 'checkedKeys',
+      label: '菜单',
+      props: {
+        treeData,
+        checkable: true,
+        defaultExpandAll: true,
+        // autoExpandParent:true,
+      },
+    },
   ],
 };
 
@@ -89,5 +119,5 @@ const d: DProps = {
 </script>
 
 <template>
-  <curd v-bind="{ primaryKey, c, u, r, d }"></curd>
+  <curd v-bind="{ primaryKey,loading, c, u, r, d }"></curd>
 </template>

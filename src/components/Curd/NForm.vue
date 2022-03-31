@@ -75,8 +75,6 @@ defineExpose({ formRef, reset });
         v-else
         :is="item.is"
         v-bind="item.props"
-        v-model:[getVModelName(item)]="formData[item.name as string]"
-        v-model:form-data="formData"
       ></component>
     </a-form-item>
     <slot name="after"></slot>
