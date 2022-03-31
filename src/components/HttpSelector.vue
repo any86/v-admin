@@ -46,7 +46,6 @@ onBeforeMount(() => {
 });
 // 默认显示文字
 const value = computed(() => {
-  console.log(props);
   return !!options.value?.length ? props.value : props.defaultText;
 });
 </script>

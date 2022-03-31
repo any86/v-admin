@@ -2,7 +2,8 @@
 import { h } from 'vue';
 import Curd from '@/components/Curd.vue';
 import arr2tree from '@any86/array-to-tree';
-import HttpSelector from '@/components/HttpSelector.vue';
+import IconFontSelector from '@/components/IconFontSelector.vue';
+
 import { http } from '@/http';
 import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types';
 import { Tag } from 'ant-design-vue';
@@ -17,6 +18,14 @@ const r: RProps = {
     {
       title: '名称',
       dataIndex: 'name',
+      // customRender({ record }) {
+      //   return h('span',[record.icon, record.name]);
+      // },
+    },
+
+    {
+      title: '路径',
+      dataIndex: 'path',
     },
 
     {
@@ -41,12 +50,12 @@ const r: RProps = {
   async done() {
     const { data } = await http('/menu');
     const tree = arr2tree(data.list);
-    console.log(tree);
     return { total: 10, list: tree };
   },
 };
 
 const c: CProps = {
+  formProps: { labelCol: { span: 3 } },
   async done(formData) {
     formData.state = formData.state ? 1 : 0;
     const { data } = await http.post('/menu');
@@ -54,16 +63,23 @@ const c: CProps = {
   },
 
   items: () => [
-    { is: 'a-input', name: 'name', label: '角色名' },
+    { is: 'a-input', name: 'name', label: '菜单名称' },
+    { is: IconFontSelector, name: 'icon', label: '图标名', props:{src: '../assets/iconfont/iconfont.json' }},
+    { is: 'a-input', name: 'path', label: '路径' },
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
   ],
 };
 
 const u: UProps = {
+  formProps: { labelCol: { span: 3 } },
   async getDefaultValue(formData) {
-    const { data } = await http.get('/menu/' + formData[primaryKey]);
-    data.state = Boolean(data.state);
-    return data;
+    try {
+      const { data } = await http.get('/menu/' + formData[primaryKey]);
+      data.state = Boolean(data.state);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   },
 
   async done() {
@@ -75,9 +91,18 @@ const u: UProps = {
 };
 
 const d: DProps = {
-  async done() {
-    const { data } = await http.delete('/menu');
-    return data.msg;
+  async done(idList) {
+    if (0 < idList.length) {
+      const { data } = await http.delete('/menu/', {
+        params: {
+          idList,
+        },
+      });
+      return data.msg;
+    } else {
+      const { data } = await http.delete('/meny/' + idList[0]);
+      return data.msg;
+    }
   },
 };
 </script>

@@ -53,7 +53,6 @@ const c: CProps = {
   items: () => [
     { is: 'a-input', name: 'name', label: '角色名' },
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
-
   ],
 };
 
@@ -73,9 +72,18 @@ const u: UProps = {
 };
 
 const d: DProps = {
-  async done() {
-    const { data } = await http.delete('/role');
-    return data.msg;
+  async done(idList) {
+    if (0 < idList.length) {
+      const { data } = await http.delete('/role/', {
+        params: {
+          idList,
+        },
+      });
+      return data.msg;
+    } else {
+      const { data } = await http.delete('/role/' + idList[0]);
+      return data.msg;
+    }
   },
 };
 </script>

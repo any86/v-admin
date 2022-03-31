@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, watch, computed } from 'vue';
 import { message } from 'ant-design-vue';
 
 import {
@@ -61,6 +61,15 @@ const pageSize = ref(10);
 const pageCount = ref(0);
 const isLoading = ref(true);
 const dataSouce = ref<tableData['list']>([]);
+const pagination = computed(() => ({
+  total: pageCount.value,
+  current: pageCurrent.value,
+  pageSize: pageSize.value,
+  onChange: (page: number) => {
+    pageCurrent.value = page;
+  },
+  onShowSizeChange: onPageSizeChange,
+}));
 
 function onPageSizeChange(current: number, size: number) {
   pageSize.value = size;
@@ -87,19 +96,8 @@ async function getList() {
     isLoading.value = false;
     pageCount.value = ~~total;
   } catch (error) {
-    message.error(error as string)
+    message.error(error as string);
   }
-
-  // http
-  //   .get<tableData>('/user', {
-  //     params: { page: pageCurrent.value, pageSize: pageSize.value, ...formDataCondition.value },
-  //   })
-  //   .then(({ data }) => {
-  //     const { list, total } = data;
-  //     dataSouce.value = list;
-  //     isLoading.value = false;
-  //     pageCount.value = ~~total;
-  //   });
 }
 watch([pageCurrent, pageSize], getList, { immediate: true });
 
@@ -194,7 +192,7 @@ async function showOne(row: KV) {
       <a-table
         class="mt-2"
         :loading="isLoading"
-        :pagination="false"
+        :pagination="{ ...r.pagination, ...pagination }"
         :columns="r.columns"
         :dataSource="dataSouce"
         :row-key="(row:KV) => row[primaryKey]"
@@ -224,14 +222,14 @@ async function showOne(row: KV) {
         </template>
       </a-table>
 
-      <p class="mt-2" align="right">
+      <!-- <p class="mt-2" align="right">
         <a-pagination
           v-model:current="pageCurrent"
           :defaultPageSize="pageSize"
           :total="pageCount"
           @showSizeChange="onPageSizeChange"
         />
-      </p>
+      </p> -->
     </a-card>
   </article>
 </template>

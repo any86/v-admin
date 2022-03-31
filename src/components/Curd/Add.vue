@@ -36,7 +36,7 @@ async function save() {
       isSubmitting.value = true;
       await formRef.validateFields();
       const text = await props.done(formData.value);
-      message.success(text);
+      // message.success(text);
       reset();
       emit('success', formData.value);
       isShow.value = false;
