@@ -15,6 +15,7 @@ export default defineComponent({
 
   data() {
     return {
+      isLoading: false,
       // 菜单数据
       menuData: [] as { [k: string]: any }[],
       // 当前选中菜单的Key
@@ -48,6 +49,7 @@ export default defineComponent({
   },
 
   async mounted() {
+    this.isLoading = true;
     const { data } = await this.$http.get('/global/menu');
     this.menuData = arr2tree(data, {
       transform: (node) => {
@@ -60,37 +62,40 @@ export default defineComponent({
         return node;
       },
     });
+    this.isLoading = false;
   },
 });
 </script>
 
 <template>
-  <a-menu class="menu" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :mode="mode">
-    <template v-for="menu in menuData">
-      <!-- 有下级菜单 -->
-      <a-sub-menu v-if="menu.children?.length > 0" :key="menu.id" :title="menu.name">
-        <template #icon>
-          <span> <i class="iconfont" :class="[menu.icon]"></i></span>
-        </template>
-        <a-menu-item v-for="{ name, id, path, icon } in menu.children" :key="id" @click="$router.push(path)">
-          {{ name }}
-          <template #icon>
-            <span> <i class="iconfont" :class="[icon]"></i></span>
-          </template>
-        </a-menu-item>
-      </a-sub-menu>
-
-      <!-- 无下级菜单 -->
-      <template v-else>
-        <a-menu-item :key="menu.id" @click="$router.push(menu.path)">
-          {{ menu.name }}
+  <a-skeleton active :loading="isLoading" >
+    <a-menu class="menu" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :mode="mode">
+      <template v-for="menu in menuData">
+        <!-- 有下级菜单 -->
+        <a-sub-menu v-if="menu.children?.length > 0" :key="menu.id" :title="menu.name">
           <template #icon>
             <span> <i class="iconfont" :class="[menu.icon]"></i></span>
           </template>
-        </a-menu-item>
+          <a-menu-item v-for="{ name, id, path, icon } in menu.children" :key="id" @click="$router.push(path)">
+            {{ name }}
+            <template #icon>
+              <span> <i class="iconfont" :class="[icon]"></i></span>
+            </template>
+          </a-menu-item>
+        </a-sub-menu>
+
+        <!-- 无下级菜单 -->
+        <template v-else>
+          <a-menu-item :key="menu.id" @click="$router.push(menu.path)">
+            {{ menu.name }}
+            <template #icon>
+              <span> <i class="iconfont" :class="[menu.icon]"></i></span>
+            </template>
+          </a-menu-item>
+        </template>
       </template>
-    </template>
-  </a-menu>
+    </a-menu>
+  </a-skeleton>
 </template>
 
 <style lang="scss" scope>

@@ -69,7 +69,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <a-layout>
+  <a-layout style="minHeight:100vh;">
     <a-layout-sider class="side" v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo">
         <!-- <img width="32" src="@/assets/logo.png" /> -->

@@ -32,7 +32,6 @@ async function save() {
   try {
     const formRef = nFormRef.value?.formRef;
     if (formRef) {
-      // console.log(formRef);
       isSubmitting.value = true;
       await formRef.validateFields();
       const text = await props.done(formData.value);

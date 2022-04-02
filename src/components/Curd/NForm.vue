@@ -57,6 +57,7 @@ defineExpose({ formRef, reset });
   <!-- {{ formData }} -->
   <a-form v-if="!isLoading && void 0 !== formData" ref="formRef" :model="formData" v-bind="formProps">
     <a-form-item v-for="item in items()" v-bind="item" colon :key="item.name" :id="item.name">
+    <!-- {{formData[item.name]}} -->
       <!-- 表单类的组件 -->
       <component
         v-if="item.name"

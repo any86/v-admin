@@ -31,7 +31,6 @@ export interface UProps extends CProps {
 }
 
 export interface RProps extends TableProps {
-  before?:()=>Promise<void>;
   // 列配置
   // 筛选条件配置
   conditionItems?: () => NFormItem[];

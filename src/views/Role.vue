@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { h, reactive, ref, onBeforeMount } from 'vue';
+import { h, reactive } from 'vue';
 import arr2tree from '@any86/array-to-tree';
 import Curd from '@/components/Curd.vue';
-import HttpSelector from '@/components/HttpSelector.vue';
 import { http } from '@/http';
 import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types';
 import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
 
 let treeData = reactive<KV[]>([]);
-const loading = ref(false);
-onBeforeMount(async () => {
-  loading.value = true;
+async function onBeforeMount() {
   const { data } = await http.get('/global/menu');
   treeData = arr2tree(data, {
     transform(node) {
@@ -20,9 +17,7 @@ onBeforeMount(async () => {
       return node;
     },
   });
-  loading.value = false;
-  console.log(treeData);
-});
+}
 
 const r: RProps = {
   columns: [
@@ -64,7 +59,7 @@ const r: RProps = {
 const c: CProps = {
   async done(formData) {
     formData.state = formData.state ? 1 : 0;
-    const { data } = await http.post('/role');
+    const { data } = await http.post('/role',formData);
     return data.msg;
   },
 
@@ -80,6 +75,7 @@ const c: CProps = {
         treeData,
         checkable: true,
         defaultExpandAll: true,
+        // selectable:true,
         // autoExpandParent:true,
       },
     },
@@ -119,5 +115,5 @@ const d: DProps = {
 </script>
 
 <template>
-  <curd v-bind="{ primaryKey,loading, c, u, r, d }"></curd>
+  <curd v-bind="{ primaryKey, onBeforeMount, c, u, r, d }"></curd>
 </template>
