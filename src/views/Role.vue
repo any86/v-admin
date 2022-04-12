@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { h, reactive } from 'vue';
 import arr2tree from '@any86/array-to-tree';
-import Curd from '@/components/Curd.vue';
+import Curd, { defineC, defineD, defineR, defineU } from '@/components/Curd.vue';
 import { http } from '@/http';
-import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types';
 import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
 
@@ -19,7 +18,7 @@ async function onBeforeMount() {
   });
 }
 
-const r: RProps = {
+const r = defineR({
   columns: [
     {
       title: 'id',
@@ -29,6 +28,15 @@ const r: RProps = {
     {
       title: '名称',
       dataIndex: 'name',
+      children: [
+        { title: 'A1', dataIndex: 'a1', key: 'a1' },
+        { title: 'A2', dataIndex: 'a2', key: 'a2' },
+        { title: 'A3', dataIndex: 'a3', key: 'a3' },
+        { title: 'A4', dataIndex: 'A4', key: 'A4' },
+        { title: 'A5', dataIndex: 'A5', key: 'A5' },
+
+
+      ],
     },
 
     {
@@ -54,12 +62,12 @@ const r: RProps = {
     const { data } = await http('/role');
     return data;
   },
-};
+});
 
-const c: CProps = {
+const c = defineC({
   async done(formData) {
     formData.state = formData.state ? 1 : 0;
-    const { data } = await http.post('/role',formData);
+    const { data } = await http.post('/role', formData);
     return data.msg;
   },
 
@@ -80,26 +88,27 @@ const c: CProps = {
       },
     },
   ],
-};
+});
 
-const u: UProps = {
+const u = defineU({
   async getDefaultValue(formData) {
     const { data } = await http.get('/role/' + formData[primaryKey]);
     data.state = Boolean(data.state);
     return data;
   },
 
-  async done() {
-    const { data } = await http.put('/role');
+  async done(formData) {
+    const { id, ...kv } = formData;
+    const { data } = await http.put('/role/' + id, kv);
     return data.msg;
   },
 
   items: c.items,
-};
+});
 
-const d: DProps = {
+const d = defineD({
   async done(idList) {
-    if (0 < idList.length) {
+    if (1 < idList.length) {
       const { data } = await http.delete('/role/', {
         params: {
           idList,
@@ -111,7 +120,7 @@ const d: DProps = {
       return data.msg;
     }
   },
-};
+});
 </script>
 
 <template>

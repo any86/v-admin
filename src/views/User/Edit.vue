@@ -88,7 +88,6 @@ defineExpose({
         <a-form-item label="邮箱" name="email" :rules="[{ required: true, message: '请输入邮箱' }]">
           <a-input v-model:value="formData.email" placeholder="请输入邮箱" allowClear></a-input>
         </a-form-item>
-      {{formData.departmentId}}
         <a-form-item label="部门" name="departmentId" :rules="[{ required: true, message: '请选择部门' }]">
           <http-selector
             v-model:value="formData.departmentId"

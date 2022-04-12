@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { h } from 'vue';
-import Curd from '@/components/Curd.vue';
+import Curd, { defineC, defineD, defineR, defineU } from '@/components/Curd.vue';
 import arr2tree from '@any86/array-to-tree';
 import IconFontSelector from '@/components/IconFontSelector.vue';
-
 import { http } from '@/http';
-import type { CProps, DProps, RProps, UProps, KV } from '@/components/Curd/Types';
 import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
-const r: RProps = {
+const r = defineR({
   columns: [
     {
       title: 'id',
@@ -52,25 +50,25 @@ const r: RProps = {
     const tree = arr2tree(data.list);
     return { total: 10, list: tree };
   },
-};
+});
 
-const c: CProps = {
+const c = defineC({
   formProps: { labelCol: { span: 3 } },
   async done(formData) {
     formData.state = formData.state ? 1 : 0;
-    const { data } = await http.post('/menu');
+    const { data } = await http.post('/menu',formData);
     return data.msg;
   },
 
   items: () => [
-    { is: 'a-input', name: 'name', label: '菜单名称',rules:[{required:true,message:'必填项'}] },
-    { is: 'a-input', name: 'path', label: '路径' ,rules:[{required:true,message:'必填项'}] },
-    { is: IconFontSelector, name: 'icon', label: '图标名'},
+    { is: 'a-input', name: 'name', label: '菜单名称', rules: [{ required: true, message: '必填项' }] },
+    { is: 'a-input', name: 'path', label: '路径', rules: [{ required: true, message: '必填项' }] },
+    { is: IconFontSelector, name: 'icon', label: '图标名' },
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
   ],
-};
+});
 
-const u: UProps = {
+const u = defineU({
   formProps: { labelCol: { span: 3 } },
   async getDefaultValue(formData) {
     try {
@@ -82,15 +80,16 @@ const u: UProps = {
     }
   },
 
-  async done() {
-    const { data } = await http.put('/menu');
+  async done(kv) {
+    const { [primaryKey]: id, ...formData } = kv;
+    const { data } = await http.put('/menu/' + id, formData);
     return data.msg;
   },
 
   items: c.items,
-};
+});
 
-const d: DProps = {
+const d = defineD({
   async done(idList) {
     if (0 < idList.length) {
       const { data } = await http.delete('/menu/', {
@@ -104,7 +103,7 @@ const d: DProps = {
       return data.msg;
     }
   },
-};
+});
 </script>
 
 <template>

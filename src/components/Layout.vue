@@ -73,7 +73,7 @@ export default defineComponent({
     <a-layout-sider class="side" v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo">
         <!-- <img width="32" src="@/assets/logo.png" /> -->
-        <span v-show="!collapsed">Vue3 Admin</span>
+        <span v-show="!collapsed">CURD Admin</span>
       </div>
 
       <!-- 菜单 -->

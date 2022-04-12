@@ -17,9 +17,10 @@ export function defineD(config: DProps): DProps {
 </script>
 
 <script setup lang="ts">
+import { cloneDeep } from 'lodash';
 import { ref, reactive, watch, computed, onBeforeMount, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
-
+import ColumnSort from './Curd/ColumnSort.vue';
 import {
   EyeOutlined,
   EditOutlined,
@@ -62,6 +63,11 @@ const emit = defineEmits<{
 // 显示前
 const isLoading = ref(false);
 
+const columnConfig = ref(cloneDeep(props.r.columns)!);
+function changeColumns(columns: any) {
+  columnConfig.value = columns;
+}
+
 onBeforeMount(async () => {
   if (props.onBeforeMount) {
     isLoading.value = true;
@@ -85,8 +91,6 @@ const selectedRowKeys = ref<string[]>([]);
 function onTableSelectChange(keys: string[]) {
   selectedRowKeys.value = keys;
 }
-
-// curd加载前执行
 
 // 分页
 const pageCurrent = ref(1);
@@ -180,6 +184,8 @@ async function showOne(row: KV) {
   oneData.value = await props.r.getOne!(row);
   isOneLoading.value = false;
 }
+
+// const = useColumnSetting();
 </script>
 
 <template>
@@ -208,10 +214,12 @@ async function showOne(row: KV) {
         cancel-text="取消"
         @confirm="remove(selectedRowKeys)"
       >
-        <a-button v-show="selectedRowKeys.length > 0" type="primary" danger
+        <a-button v-show="selectedRowKeys.length > 0" type="primary" ghost="" danger
           >批量删除({{ selectedRowKeys.length }}条)</a-button
         >
       </a-popconfirm>
+      <!-- {{ columnConfig }} -->
+      <column-sort v-if="r.columns" :columns="(r.columns as any)" @change="changeColumns" />
     </a-space>
 
     <!-- 筛选条件 -->
@@ -238,10 +246,11 @@ async function showOne(row: KV) {
     </n-form>
     <!-- 表格数据 -->
     <a-table
+      bordered
       class="mt-2"
       :loading="isTableLoading"
       :pagination="{ ...r.pagination, ...pagination }"
-      :columns="r.columns"
+      :columns="columnConfig"
       :dataSource="dataSouce"
       :row-key="(row:KV) => row[primaryKey]"
       :row-selection="r.hideRowSelection ? null : { selectedRowKeys, onChange: onTableSelectChange, ...r.rowSelection }"
