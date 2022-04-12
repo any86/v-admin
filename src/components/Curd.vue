@@ -27,8 +27,7 @@ import {
   DeleteOutlined,
   SearchOutlined,
   PlusOutlined,
-  UpOutlined,
-  DownOutlined,
+  RedoOutlined,
 } from '@ant-design/icons-vue';
 import Add from './Curd/Add.vue';
 import Edit from './Curd/Edit.vue';
@@ -107,6 +106,16 @@ const pagination = computed(() => ({
   },
   onShowSizeChange: onPageSizeChange,
 }));
+
+const tableSize = ref('default');
+const tableProps = computed(() => {
+  const { r, primaryKey } = props;
+  return {
+    pagination: { ...r.pagination, ...pagination },
+    rowKey: (row: KV) => row[primaryKey],
+    rowSelection: r.hideRowSelection ? null : { selectedRowKeys, onChange: onTableSelectChange, ...r.rowSelection },
+  };
+});
 
 function onPageSizeChange(current: number, size: number) {
   pageSize.value = size;
@@ -202,8 +211,8 @@ async function showOne(row: KV) {
     <!-- 新增 -->
     <Add ref="addRef" v-if="c" v-model="FormDataAdd" v-bind="c" @success="getList" />
 
-    <!-- 批量操作 -->
-    <a-space>
+    <div class="d-flex align-items-center">
+      <!-- 批量操作 -->
       <a-button v-if="c" :loading="isAddFormLoading" type="primary" @click="showAddForm"
         ><plus-outlined />新建</a-button
       >
@@ -214,15 +223,35 @@ async function showOne(row: KV) {
         cancel-text="取消"
         @confirm="remove(selectedRowKeys)"
       >
-        <a-button v-show="selectedRowKeys.length > 0" type="primary" ghost="" danger
+        <a-button class="ml-1" v-show="selectedRowKeys.length > 0" type="primary" ghost danger
           >批量删除({{ selectedRowKeys.length }}条)</a-button
         >
       </a-popconfirm>
-      <!-- {{ columnConfig }} -->
-      <column-sort v-if="r.columns" :columns="(r.columns as any)" @change="changeColumns" />
-    </a-space>
 
-    <!-- 筛选条件 -->
+      <p class="flex-1" align="right">
+        <a-space :size="16">
+          <a class="icon-reset" @click="reset"><redo-outlined /></a>
+
+          <!-- 筛选条件 -->
+          <column-sort v-if="r.columns" :columns="(r.columns as any)" @change="changeColumns" />
+
+          <!-- 列密度 -->
+          <a-tooltip title="表格尺寸">
+            <a-radio-group
+              v-model:value="tableSize"
+              size="small"
+              option-type="button"
+              :options="[
+                { label: '默认', value: 'default' },
+                { label: '中等', value: 'middle' },
+                { label: '紧凑', value: 'small' },
+              ]"
+            />
+          </a-tooltip>
+        </a-space>
+      </p>
+    </div>
+
     <n-form
       class="mt-2"
       v-model="formDataCondition"
@@ -248,12 +277,11 @@ async function showOne(row: KV) {
     <a-table
       bordered
       class="mt-2"
+      :size="tableSize"
       :loading="isTableLoading"
-      :pagination="{ ...r.pagination, ...pagination }"
       :columns="columnConfig"
       :dataSource="dataSouce"
-      :row-key="(row:KV) => row[primaryKey]"
-      :row-selection="r.hideRowSelection ? null : { selectedRowKeys, onChange: onTableSelectChange, ...r.rowSelection }"
+      v-bind="tableProps"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'operation' || column.key === 'operation'">
@@ -292,6 +320,12 @@ async function showOne(row: KV) {
       color: #ccc;
       font-size: 12px;
     }
+  }
+}
+
+.icon-reset {
+  transform: rotate3d(30deg);
+  &:active {
   }
 }
 </style>
