@@ -1,9 +1,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import arr2tree from '@any86/array-to-tree';
-
+import { pathToRegexp } from 'path-to-regexp';
+import MenuX from '@/components/MenuX.vue';
 export default defineComponent({
   name: 'Menu',
+
+  components: { MenuX },
 
   props: {
     mode: {
@@ -15,9 +17,6 @@ export default defineComponent({
 
   data() {
     return {
-      isLoading: false,
-      // 菜单数据
-      menuData: [] as { [k: string]: any }[],
       // 当前选中菜单的Key
       selectedKeys: [] as string[],
       // 当前打开的SubMenu
@@ -31,76 +30,60 @@ export default defineComponent({
     /**
      * 当前路径对应的菜单id
      */
-    currentPathMenu(): string | void {
-      const { name } = this.$route;
-      if (name) {
-        return this.routeNameAndMenuMap[name];
+    currentPathMenuId(): string | void {
+      const { matched } = this.$route;
+      const pathRule = matched[matched.length - 1].path;
+      const regexp = pathToRegexp(pathRule);
+      const one = this.$store.state.menuList.find((menu) => regexp.test(menu.menuUrl));
+      if (one) {
+        return one.menuId;
       }
     },
   },
 
   watch: {
-    currentPathMenu(menu?: { id: string; pid: string }) {
-      if (menu) {
-        this.selectedKeys = [menu.id];
-        this.openKeys = [menu.pid];
-      }
+    currentPathMenuId: {
+      handler(currentPathMenuId: string) {
+        // console.log(currentPathMenuId);
+        if (currentPathMenuId) {
+          this.selectedKeys = [currentPathMenuId];
+          this.openKeys = [this.$store.state.menuIdAndMenuPidMap[currentPathMenuId]];
+        }
+      },
+      immediate: true,
     },
   },
 
   async mounted() {
-    this.isLoading = true;
-    const { data } = await this.$http.get('/global/menu');
-    this.menuData = arr2tree(data, {
-      transform: (node) => {
-        if (node.path) {
-          const route = this.$router.resolve(node.path);
-          if (route.name) {
-            this.routeNameAndMenuMap[route.name] = node;
-          }
-        }
-        return node;
-      },
-    });
-    this.isLoading = false;
+    await this.$store.dispatch('getMenu');
+  },
+  methods: {
+    onClickItem(item: any) {
+      if (item.menuUrl && !item?.children?.length) {
+        this.$router.push({ path: item.menuUrl });
+      }
+    },
   },
 });
 </script>
 
 <template>
-  <a-skeleton active :loading="isLoading" >
-    <a-menu class="menu" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" :mode="mode">
-      <template v-for="menu in menuData">
-        <!-- 有下级菜单 -->
-        <a-sub-menu v-if="menu.children?.length > 0" :key="menu.id" :title="menu.name">
-          <template #icon>
-            <span> <i class="iconfont" :class="[menu.icon]"></i></span>
-          </template>
-          <a-menu-item v-for="{ name, id, path, icon } in menu.children" :key="id" @click="$router.push(path)">
-            {{ name }}
-            <template #icon>
-              <span> <i class="iconfont" :class="[icon]"></i></span>
-            </template>
-          </a-menu-item>
-        </a-sub-menu>
-
-        <!-- 无下级菜单 -->
-        <template v-else>
-          <a-menu-item :key="menu.id" @click="$router.push(menu.path)">
-            {{ menu.name }}
-            <template #icon>
-              <span> <i class="iconfont" :class="[menu.icon]"></i></span>
-            </template>
-          </a-menu-item>
-        </template>
-      </template>
-    </a-menu>
+  <a-skeleton active :loading="$store.state.isLoadingMenu">
+    <menu-x
+      class="menu"
+      v-model:selectedKeys="selectedKeys"
+      v-model:openKeys="openKeys"
+      :mode="(mode as any)"
+      :theme="($store.state.MENU_THEME as any)"
+      :fieldNames="{ title: 'menuName', key: 'menuId', icon: 'menuIcon' }"
+      :data="$store.state.menuTree"
+      @click-item="onClickItem"
+    ></menu-x>
   </a-skeleton>
 </template>
 
 <style lang="scss" scope>
 .menu {
-  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   .iconfont {

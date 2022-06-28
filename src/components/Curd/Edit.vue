@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { Prop, ref } from 'vue';
-import to from 'await-to-js';
-import cloneDeep from 'lodash/cloneDeep';
-import { type FormInstance, type FormProps } from 'ant-design-vue';
-import { ArrowRightOutlined, LockOutlined } from '@ant-design/icons-vue';
+import { ref } from 'vue';
+import { type FormProps } from 'ant-design-vue';
+import { ArrowRightOutlined } from '@ant-design/icons-vue';
+import { useForm } from './shared';
 import NForm from './NForm.vue';
 import type { UProps, KV, NFormItem } from './Types';
 interface Props extends UProps {
   modelValue: KV;
   formProps?: FormProps;
-  items: () => NFormItem[];
-  done: (formData: KV) => Promise<string>;
+  items: (formData: KV) => NFormItem[];
+  done: (formData: KV) => Promise<[boolean, string]>;
   getDefaultValue: (formData: KV) => Promise<KV>;
 }
 
@@ -22,50 +21,29 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
-let defaultFormData = {};
-// 提交中
-const isSubmitting = ref(false);
-const isShow = ref(false);
-const isLoading = ref(false);
-// 默认值
-const DEFAULT_FORM_DATA = cloneDeep(props.modelValue);
-
-const formData = ref<KV>({ ...DEFAULT_FORM_DATA });
-const nFormRef = ref<{ formRef: FormInstance }>();
-const errorMessage = ref('');
-// 保存新增
-async function save() {
-  try {
-    const formRef = nFormRef.value?.formRef;
-    if (formRef) {
-      isSubmitting.value = true;
-      await formRef.validateFields();
-      await props.done(formData.value);
-      formData.value = { ...DEFAULT_FORM_DATA };
-      emit('success', formData.value);
-      isShow.value = false;
-    }
-  } catch (error) {
+const { nFormRef, isShow, isSubmitting, save, reset, formData, setDefault } = useForm(
+  props.done,
+  (formData) => {
+    emit('success', formData);
+  },
+  (error) => {
     emit('fail', error);
-  } finally {
-    isSubmitting.value = false;
   }
-}
+);
 
-function reset() {
-  formData.value = { ...DEFAULT_FORM_DATA };
-  nFormRef.value?.formRef.resetFields();
-}
-
-async function show(params: KV) {
+const isLoading = ref(false);
+const errorMessage = ref('');
+async function show(params: KV, before = () => Promise.resolve()) {
   isShow.value = true;
   isLoading.value = true;
   errorMessage.value = '';
   try {
+    await before();
     const data = await props.getDefaultValue(params);
-    defaultFormData = !!data ? data : {};
+    setDefault(!!data ? data : {});
     formData.value = data;
   } catch (error) {
+    console.log(error);
     errorMessage.value = 'string' === typeof error ? error : '系统故障,请稍后重试';
   } finally {
     isLoading.value = false;
@@ -78,7 +56,7 @@ defineExpose({
 </script>
 
 <template>
-  <a-drawer v-model:visible="isShow" title="编辑" size="large">
+  <a-drawer v-model:visible="isShow" title="编辑"  size="large">
     <a-skeleton :loading="isLoading">
       <a-result v-if="errorMessage" status="500" title="出错了" :sub-title="errorMessage">
         <template #extra>

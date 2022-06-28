@@ -17,9 +17,12 @@ export function defineD(config: DProps): DProps {
 </script>
 
 <script setup lang="ts">
+import { CloudDownloadOutlined, UpOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash';
-import { ref, reactive, watch, computed, onBeforeMount, onMounted } from 'vue';
+import { ref, reactive, watch, computed, onBeforeMount } from 'vue';
+import { toggleFull } from 'be-full';
 import { message } from 'ant-design-vue';
+import * as xlsx from 'xlsx';
 import ColumnSort from './Curd/ColumnSort.vue';
 import {
   EyeOutlined,
@@ -38,6 +41,10 @@ interface Props {
   primaryKey: string;
 
   onBeforeMount?: () => Promise<unknown>;
+
+  exportExcel?: {
+    done: (condition: KV) => Promise<KV[]>;
+  };
 
   c?: CProps;
 
@@ -59,6 +66,12 @@ const emit = defineEmits<{
   (type: 'remove-fail', error: unknown): void;
 }>();
 
+const tableRef = ref();
+function toggleTableFull() {
+  console.log(tableRef.value.$el);
+  toggleFull(tableRef.value.$el);
+}
+
 // 显示前
 const isLoading = ref(false);
 
@@ -75,14 +88,17 @@ onBeforeMount(async () => {
   }
 });
 
-// 默认条件
-const CONDITION_DEFAULT = {};
-
-// 筛选条件
-// 复制一份, 保留默认值
-const formDataCondition = ref({ ...CONDITION_DEFAULT });
+// 筛选
+const conditionFormRef = ref<typeof NForm>();
+const conditionFormData = ref({});
 // 是否显示更多筛选条件
-const isShowMoreCondition = ref(true);
+const isShowMoreCondition = ref(false);
+watch(isShowMoreCondition, () => {
+  conditionFormRef.value?.toggleItem();
+});
+
+const conditionItems = props.r.conditionItems || (() => []);
+const hasShowMore = conditionItems().some((item) => 'toggle' in item);
 
 // 表格的选择
 // 注意table组件上一定要指定rowKey属性才能生效
@@ -101,19 +117,28 @@ const pagination = computed(() => ({
   total: pageCount.value,
   current: pageCurrent.value,
   pageSize: pageSize.value,
+  // hideOnSinglePage:true,
+  showSizeChanger: true,
+  // pageSizeOptions:[1,2,3],
   onChange: (page: number) => {
     pageCurrent.value = page;
   },
   onShowSizeChange: onPageSizeChange,
 }));
 
-const tableSize = ref('default');
-const tableProps = computed(() => {
+const tableSize = ref(props.r.tableProps?.size);
+
+const otherTableProps = computed(() => {
   const { r, primaryKey } = props;
+  // console.log(dataSouce.value,dataSouce.value.map((row) => row[primaryKey]))
   return {
-    pagination: { ...r.pagination, ...pagination },
+    pagination: { ...r.pagination, ...pagination.value },
     rowKey: (row: KV) => row[primaryKey],
     rowSelection: r.hideRowSelection ? null : { selectedRowKeys, onChange: onTableSelectChange, ...r.rowSelection },
+    // expandedRowKeys: dataSouce.value.map((row) => row[primaryKey]),
+    defaultExpandAllRows: true,
+    ...r.tableProps,
+    size: tableSize.value,
   };
 });
 
@@ -124,8 +149,8 @@ function onPageSizeChange(current: number, size: number) {
 
 // 重置条件
 // 并加载数据
-function reset() {
-  formDataCondition.value = { ...CONDITION_DEFAULT };
+async function reset() {
+  await conditionFormRef.value?.reset();
   getList();
 }
 
@@ -136,11 +161,11 @@ async function getList() {
     const { list, total } = await props.r.done({
       pageNum: pageCurrent.value,
       pageSize: pageSize.value,
-      ...formDataCondition.value,
+      ...conditionFormData.value,
     });
     dataSouce.value = list;
     isTableLoading.value = false;
-    pageCount.value = ~~total;
+    pageCount.value = Number(total);
   } catch (error) {
     message.error(error as string);
   }
@@ -149,13 +174,14 @@ watch([pageCurrent, pageSize], getList, { immediate: true });
 
 // ========= 删除 =========
 async function remove(keys: string[], row?: KV) {
-  try {
-    await props.d!.done(keys, row);
-    // message.success('删除成功');
+  const [isSucces, text] = await props.d!.done(keys, row);
+  if (isSucces) {
+    message.success(text);
+    selectedRowKeys.value = [];
     getList();
-  } catch (error) {
-    emit('remove-fail', error);
-    // message.error('删除失败,请重试!');
+  } else {
+    message.error(text);
+    emit('remove-fail', text);
   }
 }
 
@@ -182,6 +208,13 @@ async function showAddForm() {
 
 // 编辑
 const editRef = ref<typeof Edit | undefined>();
+function showEditForm(record: KV) {
+  editRef.value?.show(record, async () => {
+    if (props.u?.before) {
+      await props.u.before();
+    }
+  });
+}
 
 // 详情
 const isShowOne = ref(false);
@@ -194,6 +227,36 @@ async function showOne(row: KV) {
   isOneLoading.value = false;
 }
 
+// 导出表格
+async function exportExcelFile() {
+  const keyAndTitleMap: KV = {};
+  const columnTitles: string[] = [];
+  props.r.columns?.forEach((column: any) => {
+    const { title, dataIndex } = column;
+    if (title && dataIndex && '操作' !== title) {
+      keyAndTitleMap[dataIndex] = title;
+      columnTitles.push(title);
+    }
+  });
+
+  const dataSouce = await props.exportExcel!.done(conditionFormData);
+  const data = dataSouce.map((row) => {
+    const newRow: Record<string, any> = {};
+    for (const key in row) {
+      if (keyAndTitleMap[key]) {
+        newRow[key] = row[key];
+      }
+    }
+    return newRow;
+  });
+  data.unshift(keyAndTitleMap);
+
+  const sheet = xlsx.utils.json_to_sheet(data, { skipHeader: true });
+  const book = xlsx.utils.book_new();
+  book.SheetNames.push('sheet1');
+  book.Sheets['sheet1'] = sheet;
+  xlsx.writeFile(book, 'data.xlsx', { bookType: 'xlsx', type: 'binary' });
+}
 // const = useColumnSetting();
 </script>
 
@@ -211,11 +274,16 @@ async function showOne(row: KV) {
     <!-- 新增 -->
     <Add ref="addRef" v-if="c" v-model="FormDataAdd" v-bind="c" @success="getList" />
 
-    <div class="d-flex align-items-center">
+    <!-- 新增&导出按钮 -->
+    <div class="mb-2 d-flex align-items-center" style="column-gap: 8px">
       <!-- 批量操作 -->
       <a-button v-if="c" :loading="isAddFormLoading" type="primary" @click="showAddForm"
         ><plus-outlined />新建</a-button
       >
+
+      <!-- 导出表格 -->
+      <a-button v-if="exportExcel" type="success" @click="exportExcelFile"><cloud-download-outlined />导出</a-button>
+
       <a-popconfirm
         v-if="void 0 !== d"
         title="确定要删除吗?"
@@ -227,10 +295,11 @@ async function showOne(row: KV) {
           >批量删除({{ selectedRowKeys.length }}条)</a-button
         >
       </a-popconfirm>
-
       <p class="flex-1" align="right">
         <a-space :size="16">
-          <a class="icon-reset" @click="reset"><redo-outlined /></a>
+          <a-tooltip title="刷新表格">
+            <a class="icon-reset" @click="reset"><redo-outlined :spin="isTableLoading" /></a>
+          </a-tooltip>
 
           <!-- 筛选条件 -->
           <column-sort v-if="r.columns" :columns="(r.columns as any)" @change="changeColumns" />
@@ -242,19 +311,24 @@ async function showOne(row: KV) {
               size="small"
               option-type="button"
               :options="[
-                { label: '默认', value: 'default' },
+                { label: '宽松', value: 'default' },
                 { label: '中等', value: 'middle' },
                 { label: '紧凑', value: 'small' },
               ]"
             />
           </a-tooltip>
+
+          <!-- <a-tooltip title="全屏">
+            <a @click="toggleTableFull"><FullscreenOutlined /></a>
+          </a-tooltip> -->
         </a-space>
       </p>
     </div>
 
+    <!-- 筛选条件 -->
     <n-form
-      class="mt-2"
-      v-model="formDataCondition"
+      ref="conditionFormRef"
+      v-model="conditionFormData"
       v-if="r.conditionItems"
       :items="r.conditionItems"
       layout="inline"
@@ -265,23 +339,22 @@ async function showOne(row: KV) {
           <a-space>
             <a-button :loading="isTableLoading" @click="reset">重置</a-button>
             <a-button type="primary" :loading="isTableLoading" @click="getList"><search-outlined />查询</a-button>
-            <!-- <a-button @click="isShowMoreCondition = !isShowMoreCondition" type="link">
-                <template v-if="isShowMoreCondition"><up-outlined />收起</template>
-                <template v-else><down-outlined />展开</template>
-              </a-button> -->
+            <a-button v-if="hasShowMore" @click="isShowMoreCondition = !isShowMoreCondition" type="link">
+              <template v-if="isShowMoreCondition"><up-outlined />收起</template>
+              <template v-else><down-outlined />展开</template>
+            </a-button>
           </a-space>
         </a-form-item>
       </template>
     </n-form>
     <!-- 表格数据 -->
     <a-table
+      ref="tableRef"
       bordered
-      class="mt-2"
-      :size="tableSize"
       :loading="isTableLoading"
       :columns="columnConfig"
       :dataSource="dataSouce"
-      v-bind="tableProps"
+      v-bind="otherTableProps"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'operation' || column.key === 'operation'">
@@ -289,7 +362,7 @@ async function showOne(row: KV) {
 
           <a-button v-if="r.getOne" type="link" @click="showOne(record)"><eye-outlined />查看</a-button>
 
-          <a-button v-if="void 0 !== u" type="link" size="small" @click="editRef?.show(record)">
+          <a-button v-if="void 0 !== u" type="link" size="small" @click="showEditForm(record)">
             <edit-outlined />编辑</a-button
           >
           <a-popconfirm
@@ -321,11 +394,15 @@ async function showOne(row: KV) {
       font-size: 12px;
     }
   }
+
+  .ant-form-inline {
+    .ant-form-item {
+      margin-bottom: 16px;
+    }
+  }
 }
 
 .icon-reset {
   transform: rotate3d(30deg);
-  &:active {
-  }
 }
 </style>

@@ -3,13 +3,14 @@ import { ref } from 'vue';
 import to from 'await-to-js';
 import { type FormInstance, type FormProps, Modal, message } from 'ant-design-vue';
 import NForm from './NForm.vue';
+import { useForm } from './shared';
 import type { CProps, NFormItem, KV } from './Types';
 
 interface Props extends CProps {
   modelValue: KV;
   formProps?: FormProps;
-  items: () => NFormItem[];
-  done: (formData: KV) => Promise<string>;
+  items: (formData: KV) => NFormItem[];
+  done: (formData: KV) => Promise<[boolean, string]>;
 }
 
 interface Emits {
@@ -20,44 +21,26 @@ interface Emits {
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
-// 提交中
-const isSubmitting = ref(false);
-const isShow = ref(false);
-// 默认值
-const formData = ref({});
-const nFormRef = ref<typeof NForm>();
-const modalRef = ref<typeof Modal>();
-// 保存新增
-async function save() {
-  try {
-    const formRef = nFormRef.value?.formRef;
-    if (formRef) {
-      isSubmitting.value = true;
-      await formRef.validateFields();
-      const text = await props.done(formData.value);
-      // message.success(text);
-      reset();
-      emit('success', formData.value);
-      isShow.value = false;
-    }
-  } catch (error) {
-    console.log(error);
-    if ('string' === typeof error) {
-      message.error(error);
-    }
-    emit('fail', error);
-  } finally {
-    isSubmitting.value = false;
-  }
-}
-
-function reset() {
+function onReset() {
   const elList = document.querySelectorAll('.modal-add');
   for (const el of Array.from(elList)) {
     el.querySelector('.ant-modal-body')?.scrollTo(0, 0);
   }
-  nFormRef.value?.reset();
 }
+
+const { nFormRef, isShow, isSubmitting, save, reset, formData,setDefault} = useForm(
+  props.done,
+  (formData) => {
+    emit('success', formData);
+  },
+  (error) => {
+    console.log(error);
+    emit('fail', error);
+  },
+  onReset
+);
+
+setDefault({});
 
 defineExpose({
   reset,

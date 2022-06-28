@@ -48,6 +48,7 @@ export default defineComponent({
   },
 
   async mounted() {
+    return;
     const TYPE_MAP = {
       notification: 0,
       event: 1,

@@ -7,5 +7,7 @@ declare module '@vue/runtime-core' {
     $http: AxiosInstance;
     // 为 `this.$store` 提供类型声明
     $store: Store<State>
+    // 环境变量, 是否dev模式
+    $dev: boolean;
   }
 }
