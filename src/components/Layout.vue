@@ -42,9 +42,9 @@ export default defineComponent({
   },
 
   async mounted() {
-    // const { data } = await this.$http.get('/currentUser');
-    // this.name = data.name;
-    // this.avatar = data.avatar;
+    const { data } = await this.$http.get('/currentUser');
+    this.name = data.name;
+    this.avatar = data.avatar;
   },
 
   methods: {

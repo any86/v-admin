@@ -36,7 +36,7 @@ export default defineComponent({
       const regexp = pathToRegexp(pathRule);
       const one = this.$store.state.menuList.find((menu) => regexp.test(menu.menuUrl));
       if (one) {
-        return one.menuId;
+        return one.id;
       }
     },
   },
@@ -75,7 +75,7 @@ export default defineComponent({
       v-model:openKeys="openKeys"
       :mode="(mode as any)"
       :theme="($store.state.MENU_THEME as any)"
-      :fieldNames="{ title: 'menuName', key: 'menuId', icon: 'menuIcon' }"
+      :fieldNames="{ title: 'name', key: 'id', icon: 'menuIcon' }"
       :data="$store.state.menuTree"
       @click-item="onClickItem"
     ></menu-x>

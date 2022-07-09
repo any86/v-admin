@@ -40,8 +40,6 @@ const fieldNameMap = computed(() => {
   return { ...DEFAULT_FIELD_NAMES, ...props.fieldNames };
 });
 
-// 路由名称和菜单信息的映射关系
-const routeNameAndMenuMap = {};
 </script>
 
 <template>

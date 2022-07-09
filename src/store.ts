@@ -65,17 +65,17 @@ export default createStore<State>({
     async getMenu(context) {
       const { commit } = context;
       commit('setMenuLoading', true);
-      const { data } = await http.get('/orgMenu/getCurrentUserMenu');
+      const { data } = await http.get('/global/menu');
       // 存储列表到store
-      commit('setMenuList', data.one);
-      const menuTree = arr2tree(data.one, {
-        KEY_ID: 'menuId',
-        KEY_PID: 'menuParentid',
+      commit('setMenuList', data);
+      const menuTree = arr2tree(data, {
+        KEY_ID: 'id',
+        KEY_PID: 'pid',
         transform: (node) => {
-          if (node.menuId) {
-            if (node.menuParentid) commit('setmenuIdAndMenuPidMap', [node.menuId, node.menuParentid]);
+          if (node.id) {
+            if (node.pid) commit('setmenuIdAndMenuPidMap', [node.id, node.pid]);
           }
-          node.name = node.menuName;
+          // node.name = node.name;
           return node;
         },
       });
