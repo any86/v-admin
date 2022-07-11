@@ -9,16 +9,13 @@ const primaryKey = 'id';
 const r = defineR({
   columns: [
     {
-      title: 'id',
-      dataIndex: 'id',
-    },
-
-    {
-      title: '名称',
-      dataIndex: 'name',
-      // customRender({ record }) {
-      //   return h('span',[record.icon, record.name]);
-      // },
+      title: '菜单名称',
+      customRender({ record }) {
+        return h(() => [
+          h('i', { class: ['iconfont', 'mr-1', 'icon-' + record.icon] }),
+          `${record.name}(id: ${record.id})`,
+        ]);
+      },
     },
 
     {
