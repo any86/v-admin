@@ -262,8 +262,8 @@ const editRef = ref<typeof Edit | undefined>();
                 <a-button :loading="isLoading" @click="reset">重置</a-button>
                 <a-button type="primary" :loading="isLoading" @click="getList"><search-outlined />查询</a-button>
                 <a-button @click="isShowMoreCondition = !isShowMoreCondition" type="link">
-                  <template v-if="isShowMoreCondition"><up-outlined/>收起</template>
-                  <template v-else><down-outlined/>展开</template>
+                  <template v-if="isShowMoreCondition"><up-outlined />收起</template>
+                  <template v-else><down-outlined />展开</template>
                 </a-button>
               </a-space>
             </a-form-item>
@@ -277,7 +277,7 @@ const editRef = ref<typeof Edit | undefined>();
         :pagination="false"
         :columns="columns"
         :dataSource="dataSouce"
-        :row-key="(row:{userId:string}) => row.userId"
+        :row-key="(row:KV)=>row.userId"
         :row-selection="{ selectedRowKeys, onChange: onTableSelectChange }"
       >
         <template #bodyCell="{ column, record }">

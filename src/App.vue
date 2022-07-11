@@ -1,9 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+</script>
 
 <template>
-  <router-view></router-view>
+  <a-config-provider :locale="zhCN">
+    <router-view></router-view>
+  </a-config-provider>
 </template>
-
 <style>
 #app {
   font-family: 微软雅黑, Avenir, Helvetica, Arial, sans-serif;
@@ -31,5 +34,4 @@
 p {
   margin: 0 !important;
 }
-
 </style>
