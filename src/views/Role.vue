@@ -2,7 +2,8 @@
 import { h, reactive } from 'vue';
 import arr2tree from '@any86/array-to-tree';
 import Curd3, { defineC, defineD, defineR, defineU } from '@/components/Curd.vue';
-import Curd from '../3/v-curd.es.js'
+import Curd from 'v-curd'
+
 import { http } from '@/http';
 import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
