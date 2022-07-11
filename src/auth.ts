@@ -6,7 +6,8 @@ import 'nprogress/nprogress.css'
 
 interface Options {
     tokenName?: string;
-    pathLogin?: string,
+    pathLogin?: string;
+    httpTokenName?: string;
     // 不需要验证的路径
     whiteList?: string[];
     onNoToken?: () => void;
@@ -31,10 +32,13 @@ const DEFAULT_OPTIONS = {
     onNoToken: NOOP,
     onError: NOOP,
     tokenName: LOCAL_TOKEN_NAME,
+    httpTokenName: HTTP_TOKEN_NAME,
     pathLogin: '/login',
     path404: '/404',
     whiteList: ['/error', '/404', '/success', '/fail',],
 }
+
+
 
 
 /**
@@ -42,12 +46,12 @@ const DEFAULT_OPTIONS = {
  * @param options 
  */
 export default function (options: Options) {
-    const { router, axios, whiteList, pathLogin, path404, isAuth, onNoToken, onError, component404, tokenName } = { ...DEFAULT_OPTIONS, ...options };
+    const { router, axios, whiteList, pathLogin, path404, isAuth, onNoToken, onError, component404, tokenName, httpTokenName } = { ...DEFAULT_OPTIONS, ...options };
     whiteList.push(pathLogin);
     // 修改配置
     http = axios;
     LOCAL_TOKEN_NAME = tokenName;
-
+    HTTP_TOKEN_NAME = httpTokenName;
     router.addRoute({ path: '/:pathMatch(.*)*', name: NAME_404, component: component404 },)
 
     router.onError(() => {
@@ -83,6 +87,16 @@ export default function (options: Options) {
 
     router.afterEach(() => {
         progress.done();
+    });
+
+    // 响应拦截
+    http.interceptors.response.use(function (response) {
+        return response;
+    }, function (error) {
+        if (401 === error.response.status) {
+            router.push({ path: pathLogin });
+        }
+        return Promise.reject(error);
     });
 
     return { progress };

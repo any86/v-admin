@@ -56,8 +56,8 @@ const c = defineC({
   formProps: { labelCol: { span: 3 } },
   async done(formData) {
     formData.state = formData.state ? 1 : 0;
-    const { data } = await http.post('/menu',formData);
-    return data.msg;
+    const { data, status } = await http.post('/menu', formData);
+    return [200 === status, data.msg];
   },
 
   items: () => [
@@ -82,8 +82,8 @@ const u = defineU({
 
   async done(kv) {
     const { [primaryKey]: id, ...formData } = kv;
-    const { data } = await http.put('/menu/' + id, formData);
-    return data.msg;
+    const { status, data } = await http.put('/menu/' + id, formData);
+    return [200 === status, data.msg];
   },
 
   items: c.items,
@@ -92,15 +92,15 @@ const u = defineU({
 const d = defineD({
   async done(idList) {
     if (0 < idList.length) {
-      const { data } = await http.delete('/menu/', {
+      const { status, data } = await http.delete('/menu/', {
         params: {
           idList,
         },
       });
-      return data.msg;
+      return [200 === status, data.msg];
     } else {
-      const { data } = await http.delete('/meny/' + idList[0]);
-      return data.msg;
+      const { status, data } = await http.delete('/meny/' + idList[0]);
+      return [200 === status, data.msg];
     }
   },
 });

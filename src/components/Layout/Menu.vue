@@ -57,6 +57,7 @@ export default defineComponent({
   async mounted() {
     await this.$store.dispatch('getMenu');
   },
+  
   methods: {
     onClickItem(item: any) {
       if (item.menuUrl && !item?.children?.length) {
@@ -75,7 +76,7 @@ export default defineComponent({
       v-model:openKeys="openKeys"
       :mode="(mode as any)"
       :theme="($store.state.MENU_THEME as any)"
-      :fieldNames="{ title: 'name', key: 'id', icon: 'menuIcon' }"
+      :fieldNames="{ title: 'name', key: 'id', icon: 'icon' }"
       :data="$store.state.menuTree"
       @click-item="onClickItem"
     ></menu-x>

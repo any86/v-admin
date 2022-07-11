@@ -29,29 +29,34 @@ export function useForm(done: CProps['done'], onSuccess: (formData: KV) => void,
             isSubmitting.value = false;
             console.log(error);
             return;
-        } 
+        }
         // 保存
-        const [error1, data1] = await to(done(formData.value));
-        if (null !== error1) {
-            isSubmitting.value = false;
-            console.log(error1);
-            return;
-        } 
-        if (!Array.isArray(data1)) {
-            throw '"检查done"的返回值格式,预期[number,string]!';
-        }
+        try {
+            const [error1, data1] = await to(done(formData.value));
+            if (null !== error1) {
+                isSubmitting.value = false;
+                console.log(error1);
+                return;
+            }
+            if (!Array.isArray(data1)) {
+                throw '"检查done"的返回值格式,预期[number,string]!';
+            }
 
-        const [isSuccess, msg] = data1;
-        if (isSuccess) {
-            message.success(msg);
-            reset();
-            onSuccess(formData.value)
-        } else {
-            message.error(msg);
-            onFail(msg);
+            const [isSuccess, msg] = data1;
+            if (isSuccess) {
+                message.success(msg);
+                reset();
+                onSuccess(formData.value)
+            } else {
+                message.error(msg);
+                onFail(msg);
+            }
+            isShow.value = false;
+        } catch (error) {
+            console.log(error);
+        } finally {
+            isSubmitting.value = false;
         }
-        isShow.value = false;
-        isSubmitting.value = false;
     }
 
     function reset() {

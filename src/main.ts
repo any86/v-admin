@@ -19,7 +19,7 @@ createAuth({
     component404: () => import('@/views/404.vue'),
 
     async isAuth(to) {
-        const { status } = await http.post('/auth', to);
+        const { status } = await http.post('/auth', to.path);
         // await new Promise((resolve)=>{
         //     resolve(123)
         // });

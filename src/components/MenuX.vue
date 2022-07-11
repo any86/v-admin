@@ -1,5 +1,5 @@
 <script lang="ts">
-const DEFAULT_FIELD_NAMES = { children: 'children', title: 'title', key: 'key',icon:'icon' };
+const DEFAULT_FIELD_NAMES = { children: 'children', title: 'title', key: 'key', icon: 'icon' };
 </script>
 
 <script setup lang="ts">
@@ -39,7 +39,6 @@ defineEmits<Emits>();
 const fieldNameMap = computed(() => {
   return { ...DEFAULT_FIELD_NAMES, ...props.fieldNames };
 });
-
 </script>
 
 <template>
@@ -69,7 +68,7 @@ const fieldNameMap = computed(() => {
           <span> <i class="iconfont" :class="['icon-' + item[fieldNameMap.icon]]"></i></span>
         </template>
         <menu-x
-          :level="(level||0) + 1"
+          :level="(level || 0) + 1"
           :fieldNames="fieldNames"
           :data="item[fieldNameMap.children]"
           @click-item="$emit('click-item', $event)"
