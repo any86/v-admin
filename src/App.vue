@@ -8,6 +8,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN';
   </a-config-provider>
 </template>
 <style>
+body{background-color: #f0f2f5 !important;}
 #app {
   font-family: 微软雅黑, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
