@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { h, reactive } from 'vue';
 import arr2tree from '@any86/array-to-tree';
-import Curd3, { defineC, defineD, defineR, defineU } from '@/components/Curd.vue';
-import Curd from 'v-curd'
-
+import Curd, { defineC, defineD, defineR, defineU } from 'v-curd';
 import { http } from '@/http';
 import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
@@ -36,8 +34,6 @@ const r = defineR({
         { title: 'A3', dataIndex: 'a3', key: 'a3' },
         { title: 'A4', dataIndex: 'A4', key: 'A4' },
         { title: 'A5', dataIndex: 'A5', key: 'A5' },
-
-
       ],
     },
 
