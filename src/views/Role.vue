@@ -28,13 +28,13 @@ const r = defineR({
     {
       title: '名称',
       dataIndex: 'name',
-      children: [
-        { title: 'A1', dataIndex: 'a1', key: 'a1' },
-        { title: 'A2', dataIndex: 'a2', key: 'a2' },
-        { title: 'A3', dataIndex: 'a3', key: 'a3' },
-        { title: 'A4', dataIndex: 'A4', key: 'A4' },
-        { title: 'A5', dataIndex: 'A5', key: 'A5' },
-      ],
+      // children: [
+      //   { title: 'A1', dataIndex: 'a1', key: 'a1' },
+      //   { title: 'A2', dataIndex: 'a2', key: 'a2' },
+      //   { title: 'A3', dataIndex: 'a3', key: 'a3' },
+      //   { title: 'A4', dataIndex: 'A4', key: 'A4' },
+      //   { title: 'A5', dataIndex: 'A5', key: 'A5' },
+      // ],
     },
 
     {

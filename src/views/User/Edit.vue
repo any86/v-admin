@@ -57,7 +57,7 @@ defineExpose({
   <a-drawer v-model:visible="isShow" title="编辑" size="large">
     <a-skeleton :loading="isLoading">
       <a-form v-if="void 0 !== formData" ref="formRef" :model="formData" :label-col="{ span: 3 }">
-        <a-form-item label="姓名" name="userName" :rules="[{ required: true, message: '请输入账号' }]">
+        <a-form-item label="账号" name="userName" :rules="[{ required: true, message: '请输入账号' }]">
           <a-input v-model:value="formData.userName" placeholder="请输入账号" allowClear></a-input>
         </a-form-item>
 
@@ -101,7 +101,7 @@ defineExpose({
           <http-selector
             v-model:value="formData.roleIds"
             immediate
-            placeholder="请选择部门"
+            placeholder="请选择角色"
             mode="multiple"
             :get-options="getRoleOptions"
           />

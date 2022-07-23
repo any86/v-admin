@@ -1,5 +1,5 @@
 {
-  "name": "tie-admin",
+  "name": "vue-admin",
   "version": "0.0.0",
   "scripts": {
     "rm:nm": "rimraf node_modules",
