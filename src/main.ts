@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, VueElement } from 'vue'
 import type { RouteLocationNormalized } from 'vue-router';
 import App from './App.vue'
 // 这里router.ts可以省略ts

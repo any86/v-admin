@@ -12,7 +12,7 @@
     "lib": ["esnext", "dom"],
     "paths": {
       "@/*": ["./src/*"],
-      "@c/*": ["./src/components*"]
+      "@c/*": ["./src/components/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
