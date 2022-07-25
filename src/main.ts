@@ -12,20 +12,35 @@ import 'ant-design-vue/dist/antd.less'
 import '@5a.css/reset';
 import '@5a.css/helpers';
 import '@/assets/iconfont/iconfont.css'
+
+
+
+
+const app = createApp(App);
+app.use(router);
+
+let permissionRoutes: null | string[] = null;
 createAuth({
     router,
+
     axios: http,
 
     component404: () => import('@/views/404.vue'),
 
     async isAuth(to) {
+        if (null === permissionRoutes) {
+            await http.get('/permission').then(data => {
+                permissionRoutes = data.data.routes;
+            })
+        }
+        return permissionRoutes!.some(path => path === to.matched[to.matched.length - 1].path)
         const { status } = await http.post('/auth', to.path);
         return 200 == status;
     },
 });
 
-const app = createApp(App);
-app.use(router);
+
+
 app.use(store);
 // 加载UI
 app.use(Antd);

@@ -136,6 +136,5 @@ export function getToken() {
  * @param token 
  */
 function setHttpToken(token: string) {
-    console.log(token);
     http.defaults.headers.common[HTTP_TOKEN_NAME] = token;
 }
