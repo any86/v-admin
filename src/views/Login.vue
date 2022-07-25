@@ -4,8 +4,11 @@ import { Form, message } from 'ant-design-vue';
 import axios from 'axios';
 import { http } from '@/http';
 import { clearToken, saveToken } from '@/auth';
+import { LoginOutlined } from '@ant-design/icons-vue';
 export default defineComponent({
   name: 'Login',
+
+  components:{LoginOutlined},
 
   data() {
     return {
@@ -56,7 +59,7 @@ export default defineComponent({
         <a-form-item name="password">
           <a-input v-model:value="formData.password" type="password" placeholder="请输入密码" />
         </a-form-item>
-        <a-button type="primary" htmlType="submit" @click="login" :loading="isLoading">登录</a-button>
+        <a-button type="primary" htmlType="submit" @click="login" :loading="isLoading" block size="large"><login-outlined />登录</a-button>
       </a-form>
     </div>
   </div>
@@ -81,7 +84,6 @@ $bgColor: #eee;
   border-radius: 4px;
   transition: all 0.5s;
   &:hover {
-    transform: scale(1.05);
     box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.1);
   }
 }
