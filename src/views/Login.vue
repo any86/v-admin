@@ -8,7 +8,7 @@ import { LoginOutlined } from '@ant-design/icons-vue';
 export default defineComponent({
   name: 'Login',
 
-  components:{LoginOutlined},
+  components: { LoginOutlined },
 
   data() {
     return {
@@ -50,41 +50,74 @@ export default defineComponent({
 <template>
   <div class="page-login">
     <div class="login-box">
-      <h1>欢迎访问Vue3系统</h1>
+      <h1 class="login-box__title">欢迎访问Vue3管理系统</h1>
       <a-form class="login-box__form" ref="form" :rules="rules" :model="formData">
         <a-form-item name="username">
           <a-input v-model:value="formData.username" placeholder="请输入用户名" />
         </a-form-item>
 
         <a-form-item name="password">
-          <a-input v-model:value="formData.password" type="password" placeholder="请输入密码" />
+          <a-input-password v-model:value="formData.password" placeholder="请输入密码" />
         </a-form-item>
-        <a-button type="primary" htmlType="submit" @click="login" :loading="isLoading" block size="large"><login-outlined />登录</a-button>
+        <a-button type="primary" htmlType="submit" @click="login" :loading="isLoading" block size="large"
+          ><login-outlined />登录</a-button
+        >
       </a-form>
+      <a-alert class="mt-3" show-icon type="info">
+        <template #message> 测试账号: admin 密码: admin </template>
+        <!-- <template #description><a href="https://github.com/any86/vue-admin">源码</a></template> -->
+      </a-alert>
+      
+      <p class="mt-1" style="color:#aaa;"><a href="https://github.com/any86/vue-admin">源码: https://github.com/any86/vue-admin</a></p>
+
     </div>
   </div>
 </template>
 
 <style lang="scss">
 $bgColor: #eee;
+
+@keyframes BG {
+  50% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes BOX {
+  from {
+    transform: translateY(100%) scale(1.2);
+    opacity: 0;
+  }
+}
+
 .page-login {
   overflow: hidden;
   height: 100vh;
   width: 100%;
-  background-color: $bgColor;
+  background: -webkit-linear-gradient(315deg, #42d392 25%, #647eff) repeat;
+  background-size: 200% 100%;
+  animation: BG 10s ease-in infinite;
 }
 
 .login-box {
   overflow: hidden;
   padding: 32px;
   width: 480px;
-  background: #ffffff;
+  background: rgba(#000, 0.8);
   margin: 20vh auto;
-  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   transition: all 0.5s;
+  animation: BOX 0.3s ease-in-out;
   &:hover {
-    box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  &__title {
+    background-image: -webkit-linear-gradient(315deg, #42d392 25%, #647eff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 </style>
