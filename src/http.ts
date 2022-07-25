@@ -20,6 +20,7 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
+  console.dir(error);
   message.error(`操作失败,请联系管理员`);
   return Promise.reject(error);
 });

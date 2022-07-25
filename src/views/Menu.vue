@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h } from 'vue';
-import Curd, { defineC, defineD, defineR, defineU } from '@/components/Curd.vue';
+import Curd, { defineC, defineD, defineR, defineU } from 'v-curd';
 import arr2tree from '@any86/array-to-tree';
 import IconFontSelector from '@/components/IconFontSelector.vue';
 import { http } from '@/http';

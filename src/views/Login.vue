@@ -1,19 +1,19 @@
 <script lang="ts">
-import { defineComponent } from "vue";
-import { Form, message } from "ant-design-vue";
-import axios from "axios";
-import { http } from "@/http";
-import { clearToken, saveToken } from "@/auth";
+import { defineComponent } from 'vue';
+import { Form, message } from 'ant-design-vue';
+import axios from 'axios';
+import { http } from '@/http';
+import { clearToken, saveToken } from '@/auth';
 export default defineComponent({
-  name: "Login",
+  name: 'Login',
 
   data() {
     return {
-      formData: { username: "", password: "" },
+      formData: { username: '', password: '' },
       isLoading: false,
       rules: {
-        username: [{ required: true, message: "必填项", trigger: "blur" }],
-        password: [{ required: true, message: "必填项", trigger: "blur" }],
+        username: [{ required: true, message: '必填项', trigger: 'blur' }],
+        password: [{ required: true, message: '必填项', trigger: 'blur' }],
       },
     };
   },
@@ -25,15 +25,15 @@ export default defineComponent({
         this.isLoading = true;
         const formRef = this.$refs.form as typeof Form;
         await formRef.validate();
-        const response = await http.post("/login", this.formData);
+        const response = await http.post('/login', this.formData);
         const { token, user } = response.data;
-        this.$store.commit("setUserInfo", user);
+        this.$store.commit('setUserInfo', user);
         // 存储token
         saveToken(token);
         // 跳转到首页
-        this.$router.push({ path: "/" });
+        this.$router.push({ path: '/' });
       } catch (error) {
-        if (axios.isAxiosError(error) && 200 === error.response?.status) {
+        if (axios.isAxiosError(error)) {
           message.error(error.response?.data);
         }
       } finally {
@@ -48,33 +48,15 @@ export default defineComponent({
   <div class="page-login">
     <div class="login-box">
       <h1>欢迎访问Vue3系统</h1>
-      <a-form
-        class="login-box__form"
-        ref="form"
-        :rules="rules"
-        :model="formData"
-      >
+      <a-form class="login-box__form" ref="form" :rules="rules" :model="formData">
         <a-form-item name="username">
-          <a-input
-            v-model:value="formData.username"
-            placeholder="请输入用户名"
-          />
+          <a-input v-model:value="formData.username" placeholder="请输入用户名" />
         </a-form-item>
 
         <a-form-item name="password">
-          <a-input
-            v-model:value="formData.password"
-            type="password"
-            placeholder="请输入密码"
-          />
+          <a-input v-model:value="formData.password" type="password" placeholder="请输入密码" />
         </a-form-item>
-        <a-button
-          type="primary"
-          htmlType="submit"
-          @click="login"
-          :loading="isLoading"
-          >登录</a-button
-        >
+        <a-button type="primary" htmlType="submit" @click="login" :loading="isLoading">登录</a-button>
       </a-form>
     </div>
   </div>
