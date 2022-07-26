@@ -12,7 +12,7 @@ export default defineComponent({
 
   data() {
     return {
-      formData: { username: '', password: '' },
+      formData: { username: 'admin', password: 'admin' },
       isLoading: false,
       rules: {
         username: [{ required: true, message: '必填项', trigger: 'blur' }],
@@ -53,11 +53,11 @@ export default defineComponent({
       <h1 class="login-box__title">欢迎访问Vue3管理系统</h1>
       <a-form class="login-box__form" ref="form" :rules="rules" :model="formData">
         <a-form-item name="username">
-          <a-input v-model:value="formData.username" placeholder="请输入用户名" />
+          <a-input v-model:value="formData.username" placeholder="请输入用户名" allow-clear />
         </a-form-item>
 
         <a-form-item name="password">
-          <a-input-password v-model:value="formData.password" placeholder="请输入密码" />
+          <a-input-password v-model:value="formData.password" placeholder="请输入密码"  allow-clear />
         </a-form-item>
         <a-button type="primary" htmlType="submit" @click="login" :loading="isLoading" block size="large"
           ><login-outlined />登录</a-button
@@ -85,7 +85,7 @@ $bgColor: #eee;
 
 @keyframes BOX {
   from {
-    transform: translateY(100%) scale(1.2);
+    transform: translateY(20%) scale(1.2);
     opacity: 0;
   }
 }

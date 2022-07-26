@@ -78,9 +78,8 @@ export default defineComponent({
       collapsible
     >
       <div class="logo" :style="{ color: 'dark' === $store.state.MENU_THEME ? '#fff' : '#000' }">
-        <!-- <img width="32" src="@/assets/logo.png" /> -->
         <span v-show="!collapsed" @click="$router.push('/')">
-          <p class="font-3" align="center">CURD</p>
+          <p class="font-3" align="center">vue-admin</p>
         </span>
       </div>
 
@@ -133,13 +132,29 @@ export default defineComponent({
         </a-space>
       </a-layout-header>
       <a-layout-content class="content" :style="{ marginLeft: sideOffsetX }">
-        <router-view> </router-view>
+        <router-view v-slot="{ Component }">
+          <transition name="slide-right" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 
 <style lang="scss" scope>
+.slide-right-enter-active,
+.slide-right-leave-active {
+  will-change: transform;
+  transition: all 0.2s ease-out;
+}
+
+.slide-right-enter-from,
+.slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(-2%);
+}
+
 .header {
   position: fixed;
   z-index: 86;

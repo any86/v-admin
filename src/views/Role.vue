@@ -56,8 +56,8 @@ const r = defineR({
     },
   ],
 
-  async done() {
-    const { data } = await http('/role');
+  async done(params) {
+    const { data } = await http.get('/role',{params});
     return data;
   },
 });
