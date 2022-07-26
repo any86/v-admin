@@ -1,7 +1,10 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import { pathToRegexp } from 'path-to-regexp';
 import MenuX from '@/components/MenuX.vue';
+import getMenu from '@/shared/useMenu';
+
+import { type MenuMode } from 'ant-design-vue';
 export default defineComponent({
   name: 'Menu',
 
@@ -9,7 +12,7 @@ export default defineComponent({
 
   props: {
     mode: {
-      type: String,
+      type: String as PropType<MenuMode>,
       // 在父菜单下方显示子菜单
       default: 'inline',
     },
@@ -21,8 +24,6 @@ export default defineComponent({
       selectedKeys: [] as string[],
       // 当前打开的SubMenu
       openKeys: [] as string[],
-      // 路由名称和菜单信息的映射关系
-      routeNameAndMenuMap: {} as { [k: string | symbol]: any },
     };
   },
 
@@ -57,9 +58,9 @@ export default defineComponent({
   async mounted() {
     await this.$store.dispatch('getMenu');
   },
-  
+
   methods: {
-    onClickItem(item: any) {
+    onClickItem(item: KV<any>) {
       if (item.menuUrl && !item?.children?.length) {
         this.$router.push({ path: item.menuUrl });
       }
@@ -74,8 +75,8 @@ export default defineComponent({
       class="menu"
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKeys"
-      :mode="(mode as any)"
-      :theme="($store.state.MENU_THEME as any)"
+      :mode="mode"
+      :theme="$store.state.MENU_THEME"
       :fieldNames="{ title: 'name', key: 'id', icon: 'icon' }"
       :data="$store.state.menuTree"
       @click-item="onClickItem"

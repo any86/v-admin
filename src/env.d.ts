@@ -8,11 +8,9 @@ declare module '*.vue' {
 
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string
-  readonly $dev:boolean;
+  readonly $dev: boolean;
 }
 
-
-
-interface KV<V = unknown> {
+interface KV<V = any> {
   [k: string | number | symbol]: V;
 }
