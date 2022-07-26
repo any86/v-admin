@@ -70,7 +70,7 @@ const c = defineC({
   },
 
   items: () => [
-    { is: 'a-input', name: 'name', label: '角色名' },
+    { is: 'a-input', name: 'name', label: '角色名', rules: [{ required: true, message: '必填项' }]  },
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
     {
       is: 'a-tree',
