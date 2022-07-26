@@ -65,8 +65,8 @@ const r = defineR({
 const c = defineC({
   async done(formData) {
     formData.state = formData.state ? 1 : 0;
-    const { data } = await http.post('/role', formData);
-    return data.msg;
+    const { data,status } = await http.post('/role', formData);
+    return [200 === status,data.msg];
   },
 
   items: () => [
@@ -97,8 +97,8 @@ const u = defineU({
 
   async done(formData) {
     const { id, ...kv } = formData;
-    const { data } = await http.put('/role/' + id, kv);
-    return data.msg;
+    const { data,status } = await http.put('/role/' + id, kv);
+    return [200 === status,data.msg];
   },
 
   items: c.items,

@@ -68,7 +68,7 @@ export default defineComponent({
         <!-- <template #description><a href="https://github.com/any86/vue-admin">源码</a></template> -->
       </a-alert>
       
-      <p class="mt-1" style="color:#aaa;"><a href="https://github.com/any86/vue-admin">源码: https://github.com/any86/vue-admin</a></p>
+      <p class="mt-1" style="color:#aaa;"><a target="_new" href="https://github.com/any86/vue-admin">源码: https://github.com/any86/vue-admin</a></p>
 
     </div>
   </div>
