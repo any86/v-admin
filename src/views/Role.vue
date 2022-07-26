@@ -107,15 +107,15 @@ const u = defineU({
 const d = defineD({
   async done(idList) {
     if (1 < idList.length) {
-      const { data } = await http.delete('/role/', {
+      const {  data,status } = await http.delete('/role/', {
         params: {
           idList,
         },
       });
-      return data.msg;
+      return [200 === status,data.msg];
     } else {
-      const { data } = await http.delete('/role/' + idList[0]);
-      return data.msg;
+      const { data,status  } = await http.delete('/role/' + idList[0]);
+      return [200 === status,data.msg];
     }
   },
 });
