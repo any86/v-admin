@@ -134,7 +134,9 @@ export default defineComponent({
       <a-layout-content class="content" :style="{ marginLeft: sideOffsetX }">
         <router-view v-slot="{ Component }">
           <transition name="slide-right" mode="out-in">
-            <component :is="Component" />
+            <keep-alive :max="10">
+              <component :is="Component" />
+            </keep-alive>
           </transition>
         </router-view>
       </a-layout-content>
