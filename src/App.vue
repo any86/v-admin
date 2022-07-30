@@ -7,7 +7,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN';
     <router-view></router-view>
   </a-config-provider>
 </template>
-<style>
+<style lang="scss">
 body{background-color: #f0f2f5 !important;}
 #app {
   font-family: 微软雅黑, Avenir, Helvetica, Arial, sans-serif;
