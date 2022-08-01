@@ -50,7 +50,6 @@ export default function () {
     if (currentPathMenuId) {
       selectedKeys.value = [currentPathMenuId];
       const pid = menuIdAndMenuPidMap[currentPathMenuId];
-      console.log(menuIdAndMenuPidMap, currentPathMenuId, menuIdAndMenuPidMap[currentPathMenuId]);
       if (pid) {
         openKeys.value = [menuIdAndMenuPidMap[currentPathMenuId]];
       }
