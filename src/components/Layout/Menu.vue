@@ -1,84 +1,32 @@
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { pathToRegexp } from 'path-to-regexp';
+<script setup lang="ts">
 import MenuX from '@/components/MenuX.vue';
 import useMenu from '@/shared/useMenu';
-
 import { type MenuMode } from 'ant-design-vue';
-export default defineComponent({
-  name: 'Menu',
+import { useRouter } from 'vue-router';
 
-  components: { MenuX },
+withDefaults(defineProps<{ mode?: MenuMode }>(),{mode:'inline'});
+const [isLoading, menuTree, selectedKeys, openKeys] = useMenu();
+const router = useRouter();
 
-  props: {
-    mode: {
-      type: String as PropType<MenuMode>,
-      // 在父菜单下方显示子菜单
-      default: 'inline',
-    },
-  },
-
-  data() {
-    return {
-      // 当前选中菜单的Key
-      selectedKeys: [] as string[],
-      // 当前打开的SubMenu
-      openKeys: [] as string[],
-    };
-  },
-
-  computed: {
-    /**
-     * 当前路径对应的菜单id
-     */
-    currentPathMenuId(): string | void {
-      const { matched } = this.$route;
-      const pathRule = matched[matched.length - 1].path;
-      const regexp = pathToRegexp(pathRule);
-      const one = this.$store.state.menuList.find((menu) => regexp.test(menu.menuUrl));
-      if (one) {
-        return one.id;
-      }
-    },
-  },
-
-  watch: {
-    currentPathMenuId: {
-      handler(currentPathMenuId: string) {
-        // console.log(currentPathMenuId);
-        if (currentPathMenuId) {
-          this.selectedKeys = [currentPathMenuId];
-          this.openKeys = [this.$store.state.menuIdAndMenuPidMap[currentPathMenuId]];
-        }
-      },
-      immediate: true,
-    },
-  },
-
-  async mounted() {
-    await this.$store.dispatch('getMenu');
-  },
-
-  methods: {
-    onClickItem(item: KV<any>) {
-      if (item.menuUrl && !item?.children?.length) {
-        this.$router.push({ path: item.menuUrl });
-      }
-    },
-  },
-});
+function onClickItem(item: KV<any>) {
+  if (item.menuUrl && !item?.children?.length) {
+    router.push({ path: item.menuUrl });
+  }
+}
 </script>
 
 <template>
-  <a-skeleton active :loading="$store.state.isLoadingMenu">
+  <a-skeleton active :loading="isLoading">
+    <!-- <h1 style="color:#fff;">{{openKeys}}</h1> -->
     <menu-x
+      v-if="menuTree"
       class="menu"
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKeys"
       :mode="mode"
       :theme="$store.state.MENU_THEME"
       :fieldNames="{ title: 'name', key: 'id', icon: 'icon' }"
-      :data="$store.state.menuTree"
+      :data="menuTree"
       @click-item="onClickItem"
     ></menu-x>
   </a-skeleton>

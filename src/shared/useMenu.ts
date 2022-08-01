@@ -9,55 +9,60 @@ type ResponseData = [
 ];
 
 
-export default async function () {
+export default function () {
   const isLoading = ref(true);
   const route = useRoute();
+  // id为键, pid为值
+  const menuIdAndMenuPidMap = reactive<KV<string>>({});
 
-  try {
-    const { data } = await http.get<ResponseData>('/global/menu');
+  const selectedKeys = ref<string[]>([]);
+  const openKeys = ref<string[]>([]);
+  const menuList = ref<ResponseData>()
+  // 树
+  const menuTree = computed(() => {
+    if (menuList.value) {
+      return arr2tree(menuList.value, {
+        KEY_ID: 'id',
+        KEY_PID: 'pid',
+        transform: (node) => {
+          if (node.id) {
+            if (node.pid) menuIdAndMenuPidMap[node.id] = node.pid;
+          }
+          return node;
+        },
+      });
+    }
+  });
 
-    const selectedKeys = ref<string[]>([]);
-    const openKeys = ref<string[]>([]);
-
-
-    // id为键, pid为值
-    const menuIdAndMenuPidMap: KV<string> = {};
-    // 列表
-    const menuList = data;
-    // 树
-    const menuTree = arr2tree(data, {
-      KEY_ID: 'id',
-      KEY_PID: 'pid',
-      transform: (node) => {
-        if (node.id) {
-          if (node.pid) menuIdAndMenuPidMap[node.id] = node.pid;
-        }
-        return node;
-      },
-    });
-
-    const currentPathMenuId = computed(() => {
-      const { matched } = route;
-      const pathRule = matched[matched.length - 1].path;
-      const regexp = pathToRegexp(pathRule);
-      const menuItem = menuList.find(({ menuUrl }) => menuUrl && regexp.test(menuUrl));
+  const currentPathMenuId = computed(() => {
+    const { matched } = route;
+    const pathRule = matched[matched.length - 1].path;
+    const regexp = pathToRegexp(pathRule);
+    if (menuList.value) {
+      const menuItem = menuList.value.find(({ menuUrl }) => menuUrl && regexp.test(menuUrl));
       if (menuItem) {
         return menuItem.id;
       }
-    })
+    }
+  })
 
-    watch(currentPathMenuId, (currentPathMenuId) => {
-      if (currentPathMenuId) {
-        selectedKeys.value = [currentPathMenuId];
+  watch([currentPathMenuId,menuIdAndMenuPidMap], ([currentPathMenuId,menuIdAndMenuPidMap]) => {
+    if (currentPathMenuId) {
+      selectedKeys.value = [currentPathMenuId];
+      const pid = menuIdAndMenuPidMap[currentPathMenuId];
+      console.log(menuIdAndMenuPidMap, currentPathMenuId, menuIdAndMenuPidMap[currentPathMenuId]);
+      if (pid) {
         openKeys.value = [menuIdAndMenuPidMap[currentPathMenuId]];
       }
-    }, { immediate: true })
+    }
+  }, { immediate: true })
 
 
-    return [isLoading, reactive(menuTree), selectedKeys, openKeys] as const
-  } catch (error) {
-    throw error;
-  } finally {
+  http.get<ResponseData>('/global/menu').then(({ data }) => {
+    menuList.value = data;
     isLoading.value = false;
-  }
+  });
+
+  return [isLoading, reactive(menuTree), selectedKeys, openKeys] as const
+
 }
