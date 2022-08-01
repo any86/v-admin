@@ -74,8 +74,6 @@ export default defineComponent({
       class="side"
       :style="{ background: 'dark' === $store.state.MENU_THEME ? '' : '#fff' }"
       v-model:collapsed="collapsed"
-      :trigger="null"
-      collapsible
     >
       <div class="logo" :style="{ color: 'dark' === $store.state.MENU_THEME ? '#fff' : '#000' }">
         <span v-show="!collapsed" @click="$router.push('/')">
@@ -132,10 +130,10 @@ export default defineComponent({
         </a-space>
       </a-layout-header>
       <a-layout-content class="content" :style="{ marginLeft: sideOffsetX }">
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component,route }">
           <transition name="slide-right" mode="out-in">
             <keep-alive :max="10">
-              <component :is="Component" />
+              <component :is="Component" :key="route.path"/>
             </keep-alive>
           </transition>
         </router-view>
