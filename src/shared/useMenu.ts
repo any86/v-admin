@@ -15,6 +15,11 @@ export default async function () {
 
   try {
     const { data } = await http.get<ResponseData>('/global/menu');
+
+    const selectedKeys = ref<string[]>([]);
+    const openKeys = ref<string[]>([]);
+
+
     // id为键, pid为值
     const menuIdAndMenuPidMap: KV<string> = {};
     // 列表
@@ -41,23 +46,15 @@ export default async function () {
       }
     })
 
-    //   watch()
-
-    // watch: {
-    //   currentPathMenuId: {
-    //     handler(currentPathMenuId: string) {
-    //       // console.log(currentPathMenuId);
-    //       if (currentPathMenuId) {
-    //         this.selectedKeys = [currentPathMenuId];
-    //         this.openKeys = [this.$store.state.menuIdAndMenuPidMap[currentPathMenuId]];
-    //       }
-    //     },
-    //     immediate: true,
-    //   },
-    // },
+    watch(currentPathMenuId, (currentPathMenuId) => {
+      if (currentPathMenuId) {
+        selectedKeys.value = [currentPathMenuId];
+        openKeys.value = [menuIdAndMenuPidMap[currentPathMenuId]];
+      }
+    }, { immediate: true })
 
 
-    return [isLoading, reactive(menuTree)]
+    return [isLoading, reactive(menuTree), selectedKeys, openKeys] as const
   } catch (error) {
     throw error;
   } finally {

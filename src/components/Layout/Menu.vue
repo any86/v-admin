@@ -2,7 +2,7 @@
 import { defineComponent, type PropType } from 'vue';
 import { pathToRegexp } from 'path-to-regexp';
 import MenuX from '@/components/MenuX.vue';
-import getMenu from '@/shared/useMenu';
+import useMenu from '@/shared/useMenu';
 
 import { type MenuMode } from 'ant-design-vue';
 export default defineComponent({
