@@ -5,6 +5,7 @@ import {
   CaretDownOutlined,
   SettingOutlined,
   UserOutlined,
+  LogoutOutlined,
   FullscreenOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -22,7 +23,7 @@ export default defineComponent({
     UserOutlined,
     FullscreenOutlined,
     MenuUnfoldOutlined,
-    MenuFoldOutlined,
+    MenuFoldOutlined,LogoutOutlined,
     Notices,
     Menu,
   },
@@ -91,12 +92,12 @@ export default defineComponent({
         <menu-fold-outlined v-else class="font-1 ml-3" @click="collapseMenu" />
 
         <a-space class="header__content">
-          <a-switch
+          <!-- <a-switch
             checked-children="暗"
             un-checked-children="亮"
             :checked="'dark' === $store.state.MENU_THEME"
             @change="$store.commit('toggleMenuTheme')"
-          ></a-switch>
+          ></a-switch> -->
 
           <!-- 全屏按钮 -->
           <a class="btn-full" title="全屏" @click="toggleFull">
@@ -108,8 +109,8 @@ export default defineComponent({
 
           <!-- 用户头像 -->
           <a-dropdown>
-            <span class="avatar">
-              <img :src="avatar" alt="头像" />
+            <span v-if="name" class="avatar">
+              <img :src="avatar"/>
               <span>{{ name }}</span>
             </span>
             <template #overlay>
@@ -122,7 +123,7 @@ export default defineComponent({
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item @click="logout">
-                  <a><UserOutlined /> 退出登陆</a>
+                  <a><LogoutOutlined /> 退出登陆</a>
                 </a-menu-item>
               </a-menu>
             </template>
@@ -192,9 +193,9 @@ export default defineComponent({
     align-items: center;
     @extend .btn;
     img {
+      display: block;
       height: 28px;
       width: 28px;
-      display: block;
     }
     span {
       margin-left: 12px;
