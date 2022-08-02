@@ -7,7 +7,10 @@ https://vue-admin-zeta.vercel.app
 
 
 ## 修改主题色
-修改`./src/theme.less`中的颜色变量.
+通过修改`ant`组件库预定义的变量来实现, 分2步:
+1. 查看ant组件定义的css变量:`node_modules\ant-design-vue\lib\style\themes\default.less`
+2. 复制变量到`./src/theme.less`中进行修改,比如把ant组件库的主色调改成绿色:
 
-
-更多变量参考:`node_modules\ant-design-vue\lib\style\themes\default.less`
+```less
+@primary-color:#42b883;
+```
