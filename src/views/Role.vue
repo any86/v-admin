@@ -7,18 +7,17 @@ import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
 
 let treeData = reactive<KV[]>([]);
-async function onBeforeMount() {
-  const { data } = await http.get('/global/menu');
-  treeData = arr2tree(data, {
-    transform(node) {
-      node.title = node.name;
-      node.key = node.id;
-      return node;
-    },
-  });
-}
-
 const r = defineR({
+  async before() {
+    const { data } = await http.get('/global/menu');
+    treeData = arr2tree(data, {
+      transform(node) {
+        node.title = node.name;
+        node.key = node.id;
+        return node;
+      },
+    });
+  },
   columns: [
     {
       title: 'id',
@@ -51,13 +50,11 @@ const r = defineR({
     {
       title: '操作',
       key: 'operation',
-      fixed: 'right',
-      width: 250,
     },
   ],
 
   async done(params) {
-    const { data } = await http.get('/role',{params});
+    const { data } = await http.get('/role', { params });
     return data;
   },
 });
@@ -65,12 +62,12 @@ const r = defineR({
 const c = defineC({
   async done(formData) {
     formData.state = formData.state ? 1 : 0;
-    const { data,status } = await http.post('/role', formData);
-    return [200 === status,data.msg];
+    const { data, status } = await http.post('/role', formData);
+    return [200 === status, data.msg];
   },
 
   items: () => [
-    { is: 'a-input', name: 'name', label: '角色名', rules: [{ required: true, message: '必填项' }]  },
+    { is: 'a-input', name: 'name', label: '角色名', rules: [{ required: true, message: '必填项' }] },
     { is: 'a-switch', name: 'state', label: '是否开启', modelName: 'checked' },
     {
       is: 'a-tree',
@@ -81,15 +78,13 @@ const c = defineC({
         treeData,
         checkable: true,
         defaultExpandAll: true,
-        // selectable:true,
-        // autoExpandParent:true,
       },
     },
   ],
 });
 
 const u = defineU({
-  async getDefaultValue(formData) {
+  async before(formData) {
     const { data } = await http.get('/role/' + formData[primaryKey]);
     data.state = Boolean(data.state);
     return data;
@@ -97,8 +92,8 @@ const u = defineU({
 
   async done(formData) {
     const { id, ...kv } = formData;
-    const { data,status } = await http.put('/role/' + id, kv);
-    return [200 === status,data.msg];
+    const { data, status } = await http.put('/role/' + id, kv);
+    return [200 === status, data.msg];
   },
 
   items: c.items,
@@ -107,20 +102,20 @@ const u = defineU({
 const d = defineD({
   async done(idList) {
     if (1 < idList.length) {
-      const {  data,status } = await http.delete('/role/', {
+      const { data, status } = await http.delete('/role/', {
         params: {
           idList,
         },
       });
-      return [200 === status,data.msg];
+      return [200 === status, data.msg];
     } else {
-      const { data,status  } = await http.delete('/role/' + idList[0]);
-      return [200 === status,data.msg];
+      const { data, status } = await http.delete('/role/' + idList[0]);
+      return [200 === status, data.msg];
     }
   },
 });
 </script>
 
 <template>
-  <curd v-bind="{ primaryKey, onBeforeMount, c, u, r, d }"></curd>
+  <curd v-bind="{ primaryKey, c, u, r, d }"></curd>
 </template>

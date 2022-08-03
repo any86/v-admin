@@ -65,14 +65,10 @@ const c = defineC({
 
 const u = defineU({
   formProps: { labelCol: { span: 3 } },
-  async getDefaultValue(formData) {
-    try {
-      const { data } = await http.get('/menu/' + formData[primaryKey]);
-      data.state = Boolean(data.state);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+  async before(formData) {
+    const { data } = await http.get('/menu/' + formData[primaryKey]);
+    data.state = Boolean(data.state);
+    return data;
   },
 
   async done(kv) {
