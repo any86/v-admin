@@ -37,8 +37,6 @@ const r = defineR({
     {
       title: '操作',
       key: 'operation',
-      fixed: 'right',
-      width: 250,
     },
   ],
 
