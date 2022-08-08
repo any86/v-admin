@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, reactive } from 'vue';
 import arr2tree from '@any86/array-to-tree';
-import Curd, { defineC, defineD, defineR, defineU } from 'v-curd';
+import crud, { defineC, defineD, defineR, defineU } from 'crud-vue';
 import { http } from '@/http';
 import { Tag } from 'ant-design-vue';
 const primaryKey = 'id';
@@ -117,5 +117,5 @@ const d = defineD({
 </script>
 
 <template>
-  <curd v-bind="{ primaryKey, c, u, r, d }"></curd>
+  <crud v-bind="{ primaryKey, c, u, r, d }"></crud>
 </template>

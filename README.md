@@ -1,5 +1,5 @@
 # v-admin
-基于Vue3 / Typescript / Vite / ant-design-vue / [v-curd](https://github.com/any86/v-curd) 的后台. 
+基于Vue3 / Typescript / Vite / ant-design-vue / [crud-vue](https://github.com/any86/crud-vue) 的后台. 
 
 
 ## 🚀演示
