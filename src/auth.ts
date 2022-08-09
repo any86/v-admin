@@ -39,8 +39,6 @@ const DEFAULT_OPTIONS = {
 }
 
 
-
-
 /**
  * 路由权限验证
  * @param options 
@@ -52,7 +50,9 @@ export default function (options: Options) {
     http = axios;
     LOCAL_TOKEN_NAME = tokenName;
     HTTP_TOKEN_NAME = httpTokenName;
-    router.addRoute({ path: '/:pathMatch(.*)*', name: NAME_404, component: component404 },)
+    if (component404) {
+        router.addRoute({ path: '/:pathMatch(.*)*', name: NAME_404, component: component404 },)
+    }
 
     router.onError(() => {
         router.push({ name: NAME_404 });

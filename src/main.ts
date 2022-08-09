@@ -1,11 +1,10 @@
-import { createApp, VueElement } from 'vue'
-import type { RouteLocationNormalized } from 'vue-router';
+import { createApp } from 'vue'
 import App from './App.vue'
 // 这里router.ts可以省略ts
 import router from './router'
 import store from './store';
 import { http } from './http';
-import createAuth from '@/auth';
+import vGate from 'v-gate';
 // 加载UI库, 引入后组件会被全局注册, 我们在任意组件内都可以直接使用
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.less'
@@ -14,11 +13,11 @@ import '@5a.css/reset';
 import '@5a.css/helpers';
 import '@/assets/iconfont/iconfont.css'
 
+
 const app = createApp(App);
 app.use(router);
-
 let permissionRoutes: null | string[] = null;
-createAuth({
+vGate({
     router,
 
     axios: http,
