@@ -48,7 +48,9 @@ export default defineComponent({
 
   setup() {
     const isLoading = ref(true);
+
     const responseData = ref<ResponseData>();
+    
     onMounted(async () => {
       const response = await http.get<ResponseData>('/summary');
       isLoading.value = false;

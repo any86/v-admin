@@ -1,25 +1,40 @@
 <script setup lang="ts">
 import iconfont from '../assets/iconfont/iconfont.json';
+
+// props
 interface Props {
+  // 当前选中
   value?: string;
 }
-
-interface Emit {
-  (type: 'update:value', value: string | string[]): void;
-}
-
 const props = defineProps<Props>();
 
+// js写法
+// const props = defineProps({
+//   value:{
+//     type:String,
+//   }
+// });
+
+
+// emit
+interface Emit {
+  (type: 'update:value', value: string): void;
+}
 const emit = defineEmits<Emit>();
 
+
+// data
 const icons: { font_class: string; name: string }[] = iconfont.glyphs;
 
+// methods
 function onChange(name: string) {
   emit('update:value', props.value === name ? '' : name);
 }
 </script>
 
 <template>
+  <!-- <icon-font-selector :value="currentIcon" @update:value="currentIcon=$event" v-model="currentIcon"></icon-font-selector> -->
+
   <div class="icon-font-selector">
     <i
       class="iconfont"

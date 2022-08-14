@@ -1,5 +1,5 @@
 import * as echarts from "echarts";
-import type { ECharts } from "echarts";
+import  { type ECharts } from "echarts";
 
 import { http } from "@/http";
 import { ref, nextTick, unref, watch, onBeforeUnmount, type Ref } from 'vue';
@@ -15,6 +15,8 @@ export function useChartBar(chartRef: Ref<HTMLElement | null>, type: Ref<0 | 1>)
     let chartBar: ECharts;
     function renderBar(type: 0 | 1) {
         isLoading.value = true;
+
+        // [fn1,fn2][0] === [getSalesData, getVisitData][type]
         [getSalesData, getVisitData][type]().then(async ([xData, yData]) => {
             isLoading.value = false;
             //  确保chartRef在dom中已生成
@@ -64,14 +66,14 @@ export function useChartBar(chartRef: Ref<HTMLElement | null>, type: Ref<0 | 1>)
     watch(type, renderBar);
 
     function _resize() {
-        chartBar?.resize();
+        chartBar.resize();
     }
 
     window.addEventListener("resize", _resize);
 
     onBeforeUnmount(() => {
         window.removeEventListener("resize", _resize);
-        chartBar?.dispose();
+        chartBar.dispose();
     });
 
     return isLoading;
@@ -93,6 +95,14 @@ async function getSalesData() {
     });
     return [monthList, data];
 }
+
+
+// function  getSalesData1(){
+//     return new Promise((reslove,reject)=>{
+//         // daima 
+//         reslove([monthList, data])
+//     })
+// }
 
 /**
  * 获取访问量

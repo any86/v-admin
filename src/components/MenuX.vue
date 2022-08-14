@@ -4,11 +4,20 @@ const DEFAULT_FIELD_NAMES = { children: 'children', title: 'title', key: 'key', 
 
 <script setup lang="ts">
 import type { MenuProps } from 'ant-design-vue';
-import { computed } from 'vue';
+import { computed,withDefaults } from 'vue';
 type Key = string | number | symbol;
 type MenuItem = {
   [k in Key]: any;
 };
+
+
+
+// defineProps({
+//   data:{
+//     type: Object as PropType<MenuItem[]>,
+//     default: ()=>{}
+//   }
+// })
 
 interface Props {
   data: MenuItem[];

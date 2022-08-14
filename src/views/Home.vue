@@ -22,7 +22,7 @@ export default defineComponent({
 
 <template>
   <div class="page-home">
-    <Summary />
+    <Summary/>
 
     <!-- 折线图: 支付笔数和访问量 -->
     <PayAndVisitAmount />

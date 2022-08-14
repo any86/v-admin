@@ -25,6 +25,7 @@ export default defineComponent({
     async login() {
       try {
         clearToken();
+        // this.$http.get
         this.isLoading = true;
         const formRef = this.$refs.form as typeof Form;
         await formRef.validate();
@@ -37,7 +38,7 @@ export default defineComponent({
         this.$router.push({ path: '/' });
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          message.error(error.response?.data);
+          message.error(error.response?.data as string);
         }
       } finally {
         this.isLoading = false;

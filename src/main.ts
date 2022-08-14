@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store';
 import { http } from './http';
-import vGate from 'v-gate';
+import vGate from 'vue-auth-gate';
 // 加载UI库, 引入后组件会被全局注册, 我们在任意组件内都可以直接使用
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.less'
@@ -43,5 +43,6 @@ app.use(store);
 app.use(Antd);
 // 组件内可以使用this.$http表示http变量(axios)
 app.config.globalProperties.$http = http;
+
 // 挂载vue的根组件到id为app的元素
 app.mount('#app');

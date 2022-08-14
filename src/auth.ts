@@ -61,8 +61,10 @@ export default function (options: Options) {
     router.beforeEach(async (to) => {
         progress.start();
         // console.log(to);
+
         const token = getToken();
         setHttpToken(token);
+
         // 需要验证的路由
         if (!whiteList.includes(to.path)) {
             // 是否有token

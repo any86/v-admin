@@ -57,7 +57,6 @@ export default defineComponent({
         legend: {
           data: ["支付笔数", "访客量"],
         },
-        tooltip: {},
         xAxis: {
           type: "category",
           // x轴显示时间
@@ -85,14 +84,14 @@ export default defineComponent({
     });
 
     function _resize() {
-      chartLine?.resize();
+      chartLine.resize();
     }
 
     window.addEventListener("resize", _resize);
 
     onBeforeUnmount(() => {
       window.removeEventListener("resize", _resize);
-      chartLine?.dispose();
+      chartLine.dispose();
     });
     return { lineRef, isLoading };
   },
