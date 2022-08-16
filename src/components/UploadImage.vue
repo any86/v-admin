@@ -30,7 +30,7 @@
 import { reactive, watch } from 'vue';
 import { PlusOutlined, LoadingOutlined, CloudUploadOutlined } from '@ant-design/icons-vue';
 import { HTTP_TOKEN_KEY } from '@/const';
-import { getToken } from '@/auth';
+import { getToken } from 'vue-auth-gate';
 
 function getBase64(img: Blob, callback: (base64Url: string) => void) {
   const reader = new FileReader();

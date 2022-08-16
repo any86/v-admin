@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons-vue';
 import Notices from './Layout/Notices.vue';
 import Menu from './Layout/Menu.vue';
-import { logout } from '@/auth';
+import { logout } from 'vue-auth-gate';
 
 export default defineComponent({
   name: 'Layout',

@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 import { Form, message } from 'ant-design-vue';
 import axios from 'axios';
 import { http } from '@/http';
-import { clearToken, saveToken } from '@/auth';
+import { clearToken, saveToken } from 'vue-auth-gate';
 import { LoginOutlined } from '@ant-design/icons-vue';
 export default defineComponent({
   name: 'Login',
