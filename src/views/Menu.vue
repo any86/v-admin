@@ -90,7 +90,7 @@ const d = defineD({
       });
       return [200 === status, data.msg];
     } else {
-      const { status, data } = await http.delete('/meny/' + idList[0]);
+      const { status, data } = await http.delete('/menu/' + idList[0]);
       return [200 === status, data.msg];
     }
   },
