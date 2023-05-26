@@ -5,7 +5,6 @@ import SalesAndVisitAmount from "./Home/SalesAndVisitAmount.vue";
 import PayAndVisitAmount from "./Home/PayAndVisitAmount.vue";
 import SalesCategroy from "./Home/SalesCategroy.vue";
 import { CaretUpFilled, CaretDownFilled } from "@ant-design/icons-vue";
-import AScroll from 'any-scroll'
 
 export default defineComponent({
   name: "Home",
@@ -18,26 +17,12 @@ export default defineComponent({
     CaretUpFilled,
     CaretDownFilled,
   },
-
-  mounted() {
-    const el = document.getElementById('abc')
-    console.log(el);
-    if (el) {
-      const at = new AScroll(el)
-    }
-
-    // at.on('pan', e=>{
-    //   console.log(e);
-    // })
-  }
 });
 </script>
 
 <template>
   <div class="page-home">
-    <div id="abc">
-      <div>123123</div>
-    </div>
+
 
     <Summary />
 

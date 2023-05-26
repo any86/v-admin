@@ -33,6 +33,13 @@ const router = createRouter({
                 path: 'menu',
                 component: () => import('./views/Menu.vue'),
             },
+
+            {
+                name: 'Text',
+                path: 'text',
+                component: () => import('./views/Text.vue'),
+            },
+
         ]
     },
     {
